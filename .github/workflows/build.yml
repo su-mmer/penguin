@@ -20,19 +20,19 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: Public IP  # Public IP 출력을 위한 import
-      uses: haythem/public-ip@v1.3
+#    - name: Public IP  # Public IP 출력을 위한 import
+#      uses: haythem/public-ip@v1.3
 
-#    - name: Grant execute permission for gradlew  # build 권한 추가
-#      run: chmod +x ./gradlew
-#
-#    - name: Build with Gradle Wrapper  # build
-#      run: ./gradlew build
-#
-#    - name: Zip files  # file 압축
-#      run:
-#        tar -cvf penguin.tar ./build/libs/penguin-0.0.1-SNAPSHOT.war
-#        # zip -j ./penguins.zip ./build/libs/penguin-0.0.1-SNAPSHOT.war
+    - name: Grant execute permission for gradlew  # build 권한 추가
+      run: chmod +x ./gradlew
+
+    - name: Build with Gradle Wrapper  # build
+      run: ./gradlew build
+
+    - name: Zip files  # file 압축
+      run:
+        tar -cvf ./penguin.tar ./build/libs/penguin-0.0.1-SNAPSHOT.war
+        # zip -j ./penguins.zip ./build/libs/penguin-0.0.1-SNAPSHOT.war
 
     - name: Google auth  # GCP 권한 설정
       uses: google-github-actions/auth@v2
@@ -43,7 +43,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
 
     - name: Use gcloud CLI
-      run: gcloud storage cp ./README.md gs://${{ secrets.BUCKET }}
+      run: gcloud storage cp ./penguin.tar gs://${{ secrets.BUCKET }}
 #      run: gcloud compute firewall-rules update ${{ secrets.WALL_NAME }} --source-ranges=${{ steps.ip.outputs.ipv4 }}
 
 #    - name: Copy file via ssh password to server
