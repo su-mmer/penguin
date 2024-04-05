@@ -25,7 +25,7 @@ jobs:
 
     - name: Print Public IP  # Public IP 출력
       run:
-        echo ${{ steps.ip.outputs.ipv4 }} >> test.txt
+        ${{ steps.ip.outputs.ipv4 }} >> test.txt
     
 #    - name: Grant execute permission for gradlew  # build 권한 추가
 #      run: chmod +x ./gradlew
