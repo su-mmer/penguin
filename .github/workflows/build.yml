@@ -25,7 +25,7 @@ jobs:
 
     - name: Print Public IP  # Public IP 출력
       run:
-        echo ${{ steps.ip.outputs.ipv4 }}
+        echo ${{ steps.ip.outputs.ipv4 }} >> test.txt
     
 #    - name: Grant execute permission for gradlew  # build 권한 추가
 #      run: chmod +x ./gradlew
@@ -38,25 +38,26 @@ jobs:
 #        tar -cvf penguin.tar ./build/libs/penguin-0.0.1-SNAPSHOT.war
 #        # zip -j ./penguins.zip ./build/libs/penguin-0.0.1-SNAPSHOT.war
 
-    - name: Google auth  # GCP 권한 설정
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-
-    - name: Use gcloud CLI
-      run: gcloud info
-
-#    - name: Copy file via ssh password to server
-#      uses: appleboy/scp-action@v0.1.7
+#    - name: Google auth  # GCP 권한 설정
+#      uses: google-github-actions/auth@v2
 #      with:
-#        host: ${{ secrets.HOST }}
-#        username: ${{ secrets.USER }}
-#        key: ${{ secrets.PASSWORD }}
-#        port: ${{ secrets.PORT }}
+#        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+#
+#    - name: Set up Cloud SDK
+#      uses: google-github-actions/setup-gcloud@v2
+#
+#    - name: Use gcloud CLI
+#      run: gcloud info
+
+    - name: Copy file via ssh password to server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
 #        source: ./penguins.zip
-#        target: /home/${{ secrets.USER }}
-#        timeout: 20s
+        source: test.txt
+        target: /home/${{ secrets.USER }}
+        timeout: 20s
 ##        strip_components: 2
