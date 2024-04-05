@@ -31,7 +31,7 @@ jobs:
 
     - name: Zip files  # file 압축
       run:
-        tar -cvf ./penguin.tar ./build/libs/penguin-0.0.1-SNAPSHOT.war
+        tar -cvf ./${{ github.sha }}.tar ./build/libs/penguin-0.0.1-SNAPSHOT.war
         # zip -j ./penguins.zip ./build/libs/penguin-0.0.1-SNAPSHOT.war
 
     - name: Google auth  # GCP 권한 설정
