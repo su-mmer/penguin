@@ -40,4 +40,4 @@ jobs:
         source: ./penguins.zip
         target: /home/${{ secrets.USER }}
         timeout: 20s
-        strip_components: 2
+#        strip_components: 2
