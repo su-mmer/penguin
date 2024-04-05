@@ -19,25 +19,44 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+    - name: Public IP  # Public IP 출력을 위한 import
+      uses: haythem/public-ip@v1.3
 
-    - name: Zip files
+    - name: Print Public IP  # Public IP 출력
       run:
-        zip -j ./penguins.zip ./build/libs/penguin-0.0.1-SNAPSHOT.war
+        echo ${{ steps.ip.outputs.ipv4 }}
+    
+#    - name: Grant execute permission for gradlew  # build 권한 추가
+#      run: chmod +x ./gradlew
+#
+#    - name: Build with Gradle Wrapper  # build
+#      run: ./gradlew build
+#
+#    - name: Zip files  # file 압축
+#      run:
+#        tar -cvf penguin.tar ./build/libs/penguin-0.0.1-SNAPSHOT.war
+#        # zip -j ./penguins.zip ./build/libs/penguin-0.0.1-SNAPSHOT.war
 
-    - name: Copy file via ssh password to server
-      uses: appleboy/scp-action@v0.1.7
+    - name: Google auth  # GCP 권한 설정
+      uses: google-github-actions/auth@v2
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        source: ./penguins.zip
-        target: /home/${{ secrets.USER }}
-        timeout: 20s
-#        strip_components: 2
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Use gcloud CLI
+      run: gcloud info
+
+#    - name: Copy file via ssh password to server
+#      uses: appleboy/scp-action@v0.1.7
+#      with:
+#        host: ${{ secrets.HOST }}
+#        username: ${{ secrets.USER }}
+#        key: ${{ secrets.PASSWORD }}
+#        port: ${{ secrets.PORT }}
+#        source: ./penguins.zip
+#        target: /home/${{ secrets.USER }}
+#        timeout: 20s
+##        strip_components: 2
