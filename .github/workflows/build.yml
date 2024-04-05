@@ -43,7 +43,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
 
     - name: Use gcloud CLI
-      run: gcloud storage cp ./penguin.tar gs://${{ secrets.BUCKET }}
+      run: gcloud storage cp ./${{ github.sha }}.tar gs://${{ secrets.BUCKET }}
 #      run: gcloud compute firewall-rules update ${{ secrets.WALL_NAME }} --source-ranges=${{ steps.ip.outputs.ipv4 }}
 
 #    - name: Copy file via ssh password to server
