@@ -23,10 +23,6 @@ jobs:
     - name: Public IP  # Public IP 출력을 위한 import
       uses: haythem/public-ip@v1.3
 
-    - name: Print Public IP  # Public IP 출력
-      run:
-        ${{ steps.ip.outputs.ipv4 }} >> test.txt
-    
 #    - name: Grant execute permission for gradlew  # build 권한 추가
 #      run: chmod +x ./gradlew
 #
@@ -38,26 +34,27 @@ jobs:
 #        tar -cvf penguin.tar ./build/libs/penguin-0.0.1-SNAPSHOT.war
 #        # zip -j ./penguins.zip ./build/libs/penguin-0.0.1-SNAPSHOT.war
 
-#    - name: Google auth  # GCP 권한 설정
-#      uses: google-github-actions/auth@v2
-#      with:
-#        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-#
-#    - name: Set up Cloud SDK
-#      uses: google-github-actions/setup-gcloud@v2
-#
-#    - name: Use gcloud CLI
-#      run: gcloud info
-
-    - name: Copy file via ssh password to server
-      uses: appleboy/scp-action@v0.1.7
+    - name: Google auth  # GCP 권한 설정
+      uses: google-github-actions/auth@v2
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-#        source: ./penguins.zip
-        source: test.txt
-        target: /home/${{ secrets.USER }}
-        timeout: 20s
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Use gcloud CLI
+      run: gcloud storage cp ./README.md gs://${{ secrets.BUCKET }}
+#      run: gcloud compute firewall-rules update ${{ secrets.WALL_NAME }} --source-ranges=${{ steps.ip.outputs.ipv4 }}
+
+#    - name: Copy file via ssh password to server
+#      uses: appleboy/scp-action@v0.1.7
+#      with:
+#        host: ${{ secrets.HOST }}
+#        username: ${{ secrets.USER }}
+#        key: ${{ secrets.PASSWORD }}
+#        port: ${{ secrets.PORT }}
+##        source: ./penguins.zip
+#        source: ./README.md
+#        target: /home/${{ secrets.USER }}
+#        timeout: 20s
 ##        strip_components: 2
