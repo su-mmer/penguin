@@ -35,4 +35,5 @@ jobs:
         port: ${{ secrets.PORT }}
         source: build/libs/penguin-0.0.1-SNAPSHOT.war
         target: /home/${{ secrets.USER }}
+        timeout: 20s
         strip_components: 2
