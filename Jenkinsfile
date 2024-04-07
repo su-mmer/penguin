@@ -9,4 +9,5 @@ pipeline {
         echo 'Success Execute Jenkins'
       }
     }
+  }
 }
