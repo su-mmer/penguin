@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('test') {
       steps {
-        echo 'Success Execute Jenkins2'
+        echo 'Success Execute Jenkins3'
       }
     }
   }
