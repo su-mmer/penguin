@@ -12,15 +12,11 @@ pipeline {
     stage('ssh to comm and execute war') {
       steps {
         sshagent(credentials: ['ubuntu']) {
-          def EUNHO = sh(script: """
-              echo 888
-            """, returnStdout:true
-          ).trim()
+          def EUNHO = sh(script: 'echo 888', returnStdout:true).trim()
           echo "${EUNHO}"
         }
       }
     }
-
     
   }
 }
