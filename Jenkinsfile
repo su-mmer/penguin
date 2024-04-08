@@ -16,7 +16,7 @@ pipeline {
             EUNHO = sh(script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
             gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
-            tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
+            tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/ > dev/null
             mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
             ./findport.sh > port.txt
             cat port.txt
