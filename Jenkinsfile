@@ -1,5 +1,3 @@
-def EXECUTE_PORT
-
 pipeline {
   agent any
   environment {
@@ -30,9 +28,11 @@ pipeline {
     }
     stage('http Request') {
       steps {
-        def RESPONSE_CODE = httpRequest "http://${target}:${EUNHO}"
-        FLAG="${RESPONSE_CODE.status}"
-        echo "${FLAG}"
+        script{
+          def RESPONSE_CODE = httpRequest "http://${target}:${EUNHO}"
+          FLAG="${RESPONSE_CODE.status}"
+          echo "${FLAG}"
+        }
       }
     }
 
