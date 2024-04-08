@@ -16,7 +16,7 @@ pipeline {
           sh '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  "
               gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
-              tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/communicator-$(date "+%Y-%m-%d").war
+              tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               "
           '''
         }
