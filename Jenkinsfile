@@ -3,7 +3,7 @@ pipeline {
   environment {
     DEVBUCKET="${BUCKET}"
     FLAG="FAIL"
-    SPRING_PORT="8080"
+    SPRING_PORT=""
   }
   stages {
     stage('test') {
@@ -20,7 +20,8 @@ pipeline {
               gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
-              ./findport.sh
+              SPRING_PORT=$(sh ./findport.sh)
+              ${env.SPRING_PORT}=$SPRING_PORT
               "
           '''
         }
