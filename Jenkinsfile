@@ -6,7 +6,7 @@ pipeline {
     DEVBUCKET="${BUCKET}"
     FLAG="FAIL"
     // DATE=$(date "+%Y-%m-%d")
-    SPRING_PORT="h"
+    SPRING_PORT=""
   }
   stages {
     stage('ssh to comm and execute war') {
@@ -18,7 +18,7 @@ pipeline {
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
               ./findport.sh > port.txt
-              ${SPRING_PORT} = cat port.txt
+              ${EXECUTE_PORT} = cat port.txt
               "
           '''
         }
