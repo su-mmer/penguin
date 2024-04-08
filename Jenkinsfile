@@ -18,7 +18,7 @@ pipeline {
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
               ./findport.sh > port.txt
-              ${EXECUTE_PORT} = cat port.txt
+              ${EXECUTE_PORT}=(cat port.txt)
               "
           '''
         }
