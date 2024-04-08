@@ -13,6 +13,7 @@ pipeline {
       steps {
         sshagent(credentials: ['ubuntu']) {
           script {
+            DEVBUCKET=${env.DEVBUCKET}
             def EUNHO = sh(script: """
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
             gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
