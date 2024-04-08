@@ -17,8 +17,8 @@ pipeline {
               gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
-              ./findport.sh > port.txt
-              ${EXECUTE_PORT}=(cat port.txt)
+              if [ $(sudo lsof -t -i:8081) ]; then ${SPRING_PORT}=8080; fi
+              echo ${SPRING_PORT}
               "
           '''
         }
