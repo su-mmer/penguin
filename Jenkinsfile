@@ -12,7 +12,7 @@ pipeline {
     stage('ssh to comm and execute war') {
       steps {
         sshagent(credentials: ['ubuntu']) {
-          sh '''
+          def EUNHO=sh (script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  "
             gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
             tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
@@ -20,7 +20,8 @@ pipeline {
             ${SPRING_PORT}=cat port.txt
             echo ${SPRING_PORT}
             "
-          '''
+            ''', returnStdout:true
+          ).trim()
         }
       }
     }
