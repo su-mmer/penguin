@@ -27,7 +27,7 @@ pipeline {
     stage('get http request') {
       steps {
         script{
-          // echo "${EXECUTE_PORT}"
+          echo "${EXECUTE_PORT}"
         //   def RESPONSE_CODE = httpRequest "http://${TARGET}:8080"
         //   FLAG="${RESPONSE_CODE.status}"
         //   echo "${FLAG}"
