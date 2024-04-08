@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    BUCKET="${BUCKET}"
+    DEVBUCKET="${BUCKET}"
   }
   stages {
     stage('test') {
@@ -14,9 +14,9 @@ pipeline {
       steps {
         sshagent(credentials: ['ubuntu']) {
           sh '''
-            ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-              gcloud storage cp gs://${BUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
-              '
+            ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  "
+              gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
+              "
           '''
         }
         
