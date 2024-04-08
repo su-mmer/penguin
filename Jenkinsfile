@@ -20,17 +20,12 @@ pipeline {
               gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
-              ./findport.sh
-              ${SPRING_PORT}=$(cat port.txt)
+              ${SPRING_PORT}=$(./findport.sh)
               "
           '''
         }
 
-        script{
-          def RESPONSE_CODE = httpRequest "http://${target}:8080"
-          FLAG="${RESPONSE_CODE.status}"
-          echo "${FLAG}"
-        }
+        
       }
     }
 
