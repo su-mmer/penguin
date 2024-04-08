@@ -30,11 +30,15 @@ jobs:
     - name: Build with Gradle Wrapper  # build
       run: ./gradlew build
 
+    # - name: Zip files  # file 이름 설정, 압축
+    #   run: |
+    #     # SHA="${{ github.sha }}"
+    #     # FILENAME=$(git rev-parse --short HEAD)_$(date "+%m-%d-%H-%M").tar.gz
+    #     # tar -zcvf ./$FILENAME ./build/libs/penguin-0.0.1-SNAPSHOT.war
+
     - name: Zip files  # file 이름 설정, 압축
       run: |
-        SHA="${{ github.sha }}"
-        FILENAME=$(git rev-parse --short HEAD)_$(date "+%m-%d-%H-%M").tar.gz
-        tar -zcvf ./$FILENAME ./build/libs/penguin-0.0.1-SNAPSHOT.war
+        tar -zcvf ./test.tar.gz ./build/libs/penguin-0.0.1-SNAPSHOT.war
 
     - name: Google auth  # GCP 권한 설정
       uses: google-github-actions/auth@v2
@@ -45,4 +49,4 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
 
     - name: Use gcloud CLI
-      run: gcloud storage cp ./$FILENAME gs://${{ secrets.BUCKET }}
+      run: gcloud storage cp ./test.tar.gz gs://${{ secrets.BUCKET }}
