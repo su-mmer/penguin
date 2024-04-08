@@ -13,28 +13,14 @@ pipeline {
       steps {
         sshagent(credentials: ['ubuntu']) {
           def EUNHO = sh(script: """
-            ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-            gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
-            tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
-            mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
-            ${SPRING_PORT}=cat port.txt
-            echo ${SPRING_PORT}
-            '
+              echo 888
             """, returnStdout:true
           ).trim()
+          echo ${EUNHO}
         }
       }
     }
 
-    stage('get http request') {
-      steps {
-        script{
-          // def RESPONSE_CODE = httpRequest "http://${TARGET}:8080"
-          // FLAG="${RESPONSE_CODE.status}"
-          // echo "${FLAG}"  // 200이면 8081로 실행
-          echo ${SPRING_PORT}
-        }
-      }
-    }
+    
   }
 }
