@@ -4,7 +4,7 @@ pipeline {
     DEVBUCKET="${BUCKET}"
     FLAG="FAIL"
     // DATE=$(date "+%Y-%m-%d")
-    SPRING_PORT=""
+    SPRING_PORT="8080"
   }
   stages {
     stage('test') {
