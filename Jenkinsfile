@@ -13,7 +13,7 @@ pipeline {
         sshagent(credentials: ['ubuntu']) {
           sh '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-              gcloud storage cp gs://${env.BUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
+              gcloud storage cp gs://${BUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
               '
           '''
         }
