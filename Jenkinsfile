@@ -22,7 +22,7 @@ pipeline {
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
               EXECUTE_PORT=$(sh findport.sh)
-              ${SPRING_PORT}=echo ${EXECUTE_PORT}
+              ${SPRING_PORT}=$(echo ${EXECUTE_PORT})
               "
           '''
         }
