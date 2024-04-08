@@ -3,7 +3,7 @@ pipeline {
   environment {
     DEVBUCKET="${BUCKET}"
     FLAG="FAIL"
-    DATE=$(date "+%Y-%m-%d")
+    // DATE=$(date "+%Y-%m-%d")
     SPRING_PORT=""
   }
   stages {
