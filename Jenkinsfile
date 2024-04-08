@@ -33,9 +33,10 @@ pipeline {
     stage('get http request') {
       steps {
         script{
-          def RESPONSE_CODE = httpRequest "http://${TARGET}:${EXECUTE_PORT}"
-          FLAG="${RESPONSE_CODE.status}"
-          echo "${FLAG}"
+          echo ${EXECUTE_PORT}
+          // def RESPONSE_CODE = httpRequest "http://${TARGET}:${EXECUTE_PORT}"
+          // FLAG="${RESPONSE_CODE.status}"
+          // echo "${FLAG}"
         }
       }
     }
