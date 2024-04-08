@@ -11,11 +11,11 @@ pipeline {
     stage('ssh to comm') {
       steps {
         sshagent(credentials: ['ubuntu']) {
-          sh """
+          sh '''
             ssh -o StrictHostKeyChecking=no ${TARGET_HOST} -p ${PORT}'
               gcloud storage cp gs://communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
               '
-          """
+          '''
         }
         
       }
