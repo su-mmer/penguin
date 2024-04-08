@@ -1,3 +1,5 @@
+def EUNHO
+
 pipeline {
   agent any
   environment {
@@ -11,7 +13,7 @@ pipeline {
       steps {
         sshagent(credentials: ['ubuntu']) {
           script {
-            def EUNHO = sh(script: '''
+            EUNHO = sh(script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
             gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
             tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
