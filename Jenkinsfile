@@ -1,3 +1,5 @@
+def EXECUTE_PORT
+
 pipeline {
   agent any
   environment {
@@ -25,8 +27,6 @@ pipeline {
               "
           '''
         }
-
-        
       }
     }
 
