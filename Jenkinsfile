@@ -17,8 +17,8 @@ pipeline {
               gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
-              if [ $(sudo lsof -t -i:8081) ]; then ${SPRING_PORT}="8080"; fi
-              echo ${SPRING_PORT}
+              if [ $(sudo lsof -t -i:8081) ]; then ${EXECUTE_PORT}="8080"; fi
+              echo ${EXECUTE_PORT}
               "
           '''
         }
@@ -28,7 +28,7 @@ pipeline {
     stage('get http request') {
       steps {
         script{
-          echo "${SPRING_PORT}"
+          echo "${EXECUTE_PORT}"
           // def RESPONSE_CODE = httpRequest "http://${TARGET}:${EXECUTE_PORT}"
           // FLAG="${RESPONSE_CODE.status}"
           // echo "${FLAG}"
