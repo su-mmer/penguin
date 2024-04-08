@@ -1,5 +1,4 @@
 def EXECUTE_PORT
-def EXE
 
 pipeline {
   agent any
@@ -13,8 +12,8 @@ pipeline {
     stage('ssh to comm and execute war') {
       steps {
         sshagent(credentials: ['ubuntu']) {
-          EXE=sh '''
-            ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  "
+          def EXE=sh '''
+              ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  "
               gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
