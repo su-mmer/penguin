@@ -16,7 +16,7 @@ pipeline {
               echo 888
             """, returnStdout:true
           ).trim()
-          echo ${EUNHO}
+          echo "${EUNHO}"
         }
       }
     }
