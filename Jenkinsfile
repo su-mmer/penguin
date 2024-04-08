@@ -1,6 +1,8 @@
 pipeline {
   agent any
-
+  environment {
+    BUCKET="${BUCKET}"
+  }
   stages {
     stage('test') {
       steps {
