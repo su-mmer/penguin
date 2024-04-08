@@ -23,7 +23,7 @@ pipeline {
               gcloud storage cp gs://${DEVBUCKET}/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
               tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/
               mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d").war
-              EXECUTE_PORT=$(sh findport.sh)
+              SPRING_PORT=$(sh findport.sh)
               "
           '''
         }
@@ -33,7 +33,7 @@ pipeline {
     stage('get http request') {
       steps {
         script{
-          echo ${EXECUTE_PORT}
+          echo ${SPRING_PORT}
           // def RESPONSE_CODE = httpRequest "http://${TARGET}:${EXECUTE_PORT}"
           // FLAG="${RESPONSE_CODE.status}"
           // echo "${FLAG}"
