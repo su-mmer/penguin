@@ -1,13 +1,32 @@
 pipeline {
   agent any
-  environment {
-    FLAG="FAIL"
-  }
+
   stages {
     stage('test') {
       steps {
-        echo 'Success Execute Jenkins3'
+        echo 'Success Execute Jenkins'
       }
     }
+
+    stage('ssh to comm') {
+      steps {
+        sshagent(['ubuntu']) {
+          sh '''
+          ssh -o StrictHostKeyChecking=no hee@${target} '
+              gcloud storage cp gs://communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
+              '
+          '''
+        }
+        
+      }
+    }
+
+    // stage('') {
+    //   steps {
+    //     script {
+    //       sh 
+    //     }
+    //   }
+    // }
   }
 }
