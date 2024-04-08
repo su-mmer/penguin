@@ -28,7 +28,8 @@ jobs:
 
     - name: Zip files  # file 이름 설정, 압축
       run:
-        tar -zcvf ./communicator-$(date "+%Y-%m-%d").tar.gz ./build/libs/penguin-0.0.1-SNAPSHOT.war
+        tar -zcvf ./communicator-$(date "+%Y-%m-%d").tar.gz ./build/libs/ penguin-0.0.1-SNAPSHOT.war
+        
 
     - name: Google auth  # GCP 권한 설정
       uses: google-github-actions/auth@v2
