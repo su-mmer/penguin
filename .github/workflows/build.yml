@@ -19,22 +19,12 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-  
-    # - name: hello
-    #   run:
-    #     echo "Hello"
 
     - name: Grant execute permission for gradlew  # build 권한 추가
       run: chmod +x ./gradlew
 
     - name: Build with Gradle Wrapper  # build
       run: ./gradlew build
-
-    # - name: Zip files  # file 이름 설정, 압축
-    #   run: |
-    #     # SHA="${{ github.sha }}"
-    #     # FILENAME=$(git rev-parse --short HEAD)_$(date "+%m-%d-%H-%M").tar.gz
-    #     # tar -zcvf ./$FILENAME ./build/libs/penguin-0.0.1-SNAPSHOT.war
 
     - name: Zip files  # file 이름 설정, 압축
       run:
