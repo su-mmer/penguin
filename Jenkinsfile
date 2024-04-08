@@ -33,7 +33,7 @@ pipeline {
     stage('get http request') {
       steps {
         script{
-          echo "${SPRING_PORT}"
+          echo "${env.SPRING_PORT}"
           // def RESPONSE_CODE = httpRequest "http://${TARGET}:${EXECUTE_PORT}"
           // FLAG="${RESPONSE_CODE.status}"
           // echo "${FLAG}"
