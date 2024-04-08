@@ -31,6 +31,7 @@ pipeline {
     stage('http Request') {
       steps {
         script{
+          echo "${EUNHO}"
           def RESPONSE_CODE = httpRequest "http://${target}:${EUNHO}"
           FLAG="${RESPONSE_CODE.status}"
           echo "${FLAG}"
