@@ -18,7 +18,7 @@ pipeline {
               fields: [
                 [
                   title: 'URL',
-                  value: ${env.BUILD_URL},
+                  value: "${env.BUILD_URL}",
                   short: false
                 ]
               ],
