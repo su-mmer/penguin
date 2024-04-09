@@ -66,7 +66,10 @@ pipeline {
       //   expression { "${FLAG}"=="200" }
       // }
       steps {
-        sh /home/ubuntu/LB/war1-100.sh
+        script {
+          sh /home/ubuntu/LB/war1-100.sh
+
+        }
       }
     }
     
