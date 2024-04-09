@@ -1,4 +1,4 @@
-def EUNHO
+def PORT
 
 pipeline {
   agent any
@@ -7,28 +7,40 @@ pipeline {
     FLAG="FAIL"
   }
   stages {
-    stage('Confirm to Deploy') {
+    // stage('Confirm to Deploy') {
+    //   steps {
+    //     script {
+    //       def attachments = [
+    //         [
+    //           fallback: 'Request Fail',
+    //           title: 'This is Title',
+    //           title_link: "https://github.com/${github.repository}/actions/runs/${github.run_id}",
+    //           author_name: 'cloit',
+    //           text: 'I am Groot!',
+    //           color: 'good',
+    //           fields: [
+    //             {
+    //               "title": "Priority",
+    //               "value": "High",
+    //               "short": false
+    //             }
+    //           ],
+    //           footer: "Slack API"
+    //       ]
+    //       slackSend(channel: "#alarm-test", attachments: attachments)
+    //     }
+    //   }
+    // }
+    stage('Alert Message') {
+      input {
+          message "Approve Deploy"
+          ok "Yes"
+          parameters {
+              string(name: 'Choose', defaultValue: 'Yes', description: 'You can say "Yes" or "No"')
+          }
+      }
       steps {
-        script {
-          def attachments = [
-            [
-              fallback: 'Request Fail',
-              title: 'This is Title',
-              title_link: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-              author_name: 'cloit',
-              text: 'I am Groot!',
-              color: 'good',
-              fields: [
-                {
-                  "title": "Priority",
-                  "value": "High",
-                  "short": false
-                }
-              ],
-              footer: "Slack API"
-          ]
-          slackSend(channel: "#alarm-test", attachments: attachments)
-        }
+        echo "This is Your ${Choose}"
       }
     }
 
@@ -36,7 +48,7 @@ pipeline {
       steps {
         sshagent(credentials: ['ubuntu']) {
           script {
-            EUNHO = sh(script: '''
+            PORT = sh(script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
             gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d").tar.gz /appl/communicator-$(date "+%Y-%m-%d").tar.gz
             tar -zxvf /appl/communicator-$(date "+%Y-%m-%d").tar.gz -C /appl/ > dev/null
@@ -45,11 +57,12 @@ pipeline {
             cat port.txt
             '
             ''', returnStdout:true).trim()
-            echo "EUNHO: ${EUNHO}"
+            echo "PORT: ${PORT}"
           }
         }
       }
     }
+
     // stage('http Request') {
     //   steps {
     //     script{
