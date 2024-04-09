@@ -7,30 +7,30 @@ pipeline {
     FLAG="FAIL"
   }
   stages {
-    // stage('Confirm to Deploy') {
-    //   steps {
-    //     script {
-    //       def attachments = [
-    //         [
-    //           fallback: 'Request Fail',
-    //           title: 'This is Title',
-    //           title_link: "https://github.com/${github.repository}/actions/runs/${github.run_id}",
-    //           author_name: 'cloit',
-    //           text: 'I am Groot!',
-    //           color: 'good',
-    //           fields: [
-    //             {
-    //               "title": "Priority",
-    //               "value": "High",
-    //               "short": false
-    //             }
-    //           ],
-    //           footer: "Slack API"
-    //       ]
-    //       slackSend(channel: "#alarm-test", attachments: attachments)
-    //     }
-    //   }
-    // }
+    stage('Confirm to Deploy') {
+      steps {
+        script {
+          def attachments = [
+            [
+              fallback: 'Request Fail',
+              title: 'This is Title',
+              author_name: 'GROOT',
+              text: 'I am Groot!',
+              color: 'good',
+              fields: [
+                {
+                  "title": "Priority",
+                  "value": "High",
+                  "short": false
+                }
+              ],
+              footer: "Slack API"
+          ]
+          slackSend(channel: "#alarm-test", attachments: attachments)
+        }
+      }
+    }
+
     stage('Alert Message') {
       input {
           message "Approve Deploy"
