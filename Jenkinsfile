@@ -65,12 +65,14 @@ pipeline {
       // when {
       //   expression { "${FLAG}"=="200" }
       // }
-      steps {
-        script {
-          sh /home/ubuntu/LB/war1-100.sh
+      // steps {
+      //   script {
+      //     sh /home/ubuntu/LB/war1-100.sh
 
-        }
-      }
+      //   }
+      // }
+      sh 'pwd'
+      // sh '/home/ubuntu/LB/war1-100.sh'
     }
     
   }
