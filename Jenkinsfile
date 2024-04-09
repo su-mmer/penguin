@@ -8,57 +8,40 @@ pipeline {
   // }
   stages {
     stage('Slack: Confirm to Deploy') {
-      stages {
-        stage('slack') {
-          steps {
-            script {
-              def attachments = [
-                [
-                  title: 'Jenkins 배포 승인 요청',
-                  text: 'URL에 접속 후 배포 승인',
-                  color: '#45aaf2',
-                  fields: [
-                    [
-                      title: 'Commit',
-                      value: 'High',
-                      short: false
-                    ]
-                  ],
-                  footer: "Message from Jenkins"
-                ]
-              ]
-              slackSend(channel: "#alarm-test", attachments: attachments)
-            }
-          }
-
+      steps {
+        script {
+          def attachments = [
+            [
+              title: 'Jenkins 배포 승인 요청',
+              text: '${env.BUILD_URL}에 접속 후 배포 승인',
+              color: '#45aaf2',
+              // fields: [
+              //   [
+              //     title: 'Commit',
+              //     value: 'High',
+              //     short: false
+              //   ]
+              // ],
+              footer: "Message from Jenkins"
+            ]
+          ]
+          slackSend(channel: "#alarm-test", attachments: attachments)
         }
-        stage(message) {
-          input {
+      }
+    }
+
+    stage('Jenkins Approve Message') {
+      input {
           message "Approve Deploy"
           ok "Yes"
           parameters {
               string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
           }
-          }
-          steps {
-            echo "This is Your Answer: ${Answer}"
-          }
-        }
+      }
+      steps {
+        echo "This is Your Answer: ${Answer}"
       }
     }
-
-    // stage('Jenkins Approve Message') {
-    //   input {
-    //       message "Approve Deploy"
-    //       ok "Yes"
-    //       parameters {
-    //           string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
-    //       }
-    //   }
-      // steps {
-      //   echo "This is Your Answer: ${Answer}"
-      // }
-    // }
 
     stage('ssh to comm and execute war') {
       steps {
