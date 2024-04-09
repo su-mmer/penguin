@@ -19,12 +19,12 @@ pipeline {
               color: 'good',
               fields: [
                 {
-                  "title": "Priority",
-                  "value": "High",
-                  "short": false
+                  title: "Priority",
+                  value: "High",
+                  short: false
                 }
               ],
-              footer: "Slack API"
+              footer: "Message from Jenkins"
           ]
           slackSend(channel: "#alarm-test", attachments: attachments)
         }
