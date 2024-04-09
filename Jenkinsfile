@@ -61,10 +61,10 @@ pipeline {
       }
       post {
         success {
-          slackSend (channel: '#alarm-test', color: 'good', message: "Deploy Application SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+          slackSend (channel: '#alarm-test', color: 'good', message: "어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 승인을 요청합니다.\n${env.BUILD_URL}")
         }
         failure {
-          slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n (${env.BUILD_URL})")
+          slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n ${env.BUILD_URL}")
         }
       }
     }
