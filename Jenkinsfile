@@ -73,12 +73,12 @@ pipeline {
     stage('LB 10:90 Message') {
       when {
         expression { "${FLAG}"=="SUCCESS:8081" }
-      }
-      input {
-        message "Approve Deploy"
-        ok "Yes"
-        parameters {
-          string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+        input {
+          message "Approve Deploy"
+          ok "Yes"
+          parameters {
+            string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+          }
         }
       }
       steps {
