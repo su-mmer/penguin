@@ -19,8 +19,8 @@ pipeline {
               color: 'good',
               fields: [
                 {
-                  title: "Priority",
-                  value: "High",
+                  title: 'Hello',
+                  value: 'High',
                   short: false
                 }
               ],
