@@ -66,9 +66,7 @@ pipeline {
       //   expression { "${FLAG}"=="200" }
       // }
       steps {
-        script {
-          gcloud compute url-maps import ew1-dvs-dev-communicator-alb --source ew1-dvs-dev-communicator-alb-war2-100.yaml --region europe-west1
-        }
+        gcloud compute url-maps import ew1-dvs-dev-communicator-alb --source ew1-dvs-dev-communicator-alb-war2-100.yaml --region europe-west1
       }
     }
     
