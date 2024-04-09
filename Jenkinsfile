@@ -15,6 +15,12 @@ pipeline {
               title: 'This is Title',
               text: 'I am Groot!',
               color: 'good'
+              "fields": [
+              {
+                  "title": "Priority",
+                  "value": "High",
+                  "short": false
+              }
             ]
           ]
           slackSend(channel: "#alarm-test", attachments: attachments)
