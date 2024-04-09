@@ -11,14 +11,12 @@ pipeline {
         script {
           def attachments = [
             [
-              fallback: 'Request Fail',
-              title: 'This is Title',
-              author_name: 'GROOT',
-              text: 'I am Groot!',
-              color: 'good',
+              title: 'Jenkins 배포 승인 요청',
+              text: 'URL에 접속 후 배포 승인',
+              color: '#45aaf2',
               fields: [
                 [
-                  title: 'Hello',
+                  title: 'Commit',
                   value: 'High',
                   short: false
                 ]
@@ -50,9 +48,9 @@ pipeline {
           script {
             PORT = sh(script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-            gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8080.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8080.tar.gz
-            tar -zxvf /appl/communicator-$(date "+%Y-%m-%d")8080.tar.gz -C /appl/ > /dev/null 2>&1
-            mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d")8080.war
+            gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8081.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz
+            tar -zxvf /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz -C /appl/ > /dev/null 2>&1
+            mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d")8081.war
             ./findport.sh > port.txt
             cat port.txt
             '
