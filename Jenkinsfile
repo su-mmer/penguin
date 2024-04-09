@@ -13,7 +13,7 @@ pipeline {
           def attachments = [
             [
               title: 'Jenkins 배포 승인 요청',
-              text: "${env.BUILD_URL}",
+              text: '"${env.BUILD_URL}"에 접속 후 승인 요청',
               color: '#45aaf2',
               // fields: [
               //   [
