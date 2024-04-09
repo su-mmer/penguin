@@ -70,24 +70,39 @@ pipeline {
     }
     
 
-    // slack 1:9 실행합니다
-    stage('LB 10:90') {
+    stage('LB 10:90 Message') {
       when {
         expression { "${FLAG}"=="SUCCESS:8081" }
       }
+      input {
+        message "Approve Deploy"
+        ok "Yes"
+        parameters {
+          string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+        }
+      }
       steps {
-        // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
-        sh (script: 'echo "10:90"')
-        sleep 300  // 300초 대기
+        echo "This is Your Answer: ${Answer}"
       }
     }
+
+    // stage('LB 10:90') {
+    //   when {
+    //     expression { "${FLAG}"=="SUCCESS:8081" }
+    //   }
+    //   steps {
+    //     // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
+    //     sh (script: 'echo "10:90"')
+    //     sleep 300  // 300초 대기
+    //   }
+    // }
     // slack 0:10 실행합니다
-    stage('LB 0:100') {
-      steps {
-        // sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
-        sh (script: 'echo "0:100"')
-      }
-    }
+    // stage('LB 0:100') {
+    //   steps {
+    //     // sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
+    //     sh (script: 'echo "0:100"')
+    //   }
+    // }
     
   }
 }
