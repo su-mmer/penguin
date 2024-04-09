@@ -5,7 +5,6 @@ pipeline {
   environment {
     DEVBUCKET="${BUCKET}"
     FLAG="FAIL"
-    SPRING_PORT=""
   }
   stages {
     stage('Confirm to Deploy') {
@@ -18,7 +17,7 @@ pipeline {
               color: 'good'
             ]
           ]
-          slackSend(channel: "#alaerm-test", attachments: attachments)
+          slackSend(channel: "#alarm-test", attachments: attachments)
         }
       }
     }
@@ -41,26 +40,26 @@ pipeline {
         }
       }
     }
-    stage('http Request') {
-      steps {
-        script{
-          def RESPONSE_CODE = httpRequest "http://${target}:${EUNHO}"
-          FLAG="${RESPONSE_CODE.status}"
-          echo "${FLAG}"
-        }
-      }
-    }
+    // stage('http Request') {
+    //   steps {
+    //     script{
+    //       def RESPONSE_CODE = httpRequest "http://${target}:${EUNHO}"
+    //       FLAG="${RESPONSE_CODE.status}"
+    //       echo "${FLAG}"
+    //     }
+    //   }
+    // }
 
-    stage('application success') {
-      when {
-        expression { "${FLAG}"=="200" }
-      }
-      steps {
-        script {
-          echo "success"
-        }
-      }
-    }
+    // stage('application success') {
+    //   when {
+    //     expression { "${FLAG}"=="200" }
+    //   }
+    //   steps {
+    //     script {
+    //       echo "success"
+    //     }
+    //   }
+    // }
     
   }
 }
