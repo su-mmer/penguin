@@ -71,7 +71,7 @@ pipeline {
 
       //   }
       // }
-      sh 'pwd'
+      sh (script: 'sh /home/ubuntu/LB/war1-100.sh')
       // sh '/home/ubuntu/LB/war1-100.sh'
     }
     
