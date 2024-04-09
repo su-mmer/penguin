@@ -58,7 +58,7 @@ pipeline {
             cat port.txt
             '
             ''', returnStdout:true).trim()
-            echo "PORT: ${PORT}"
+            // echo "PORT: ${PORT}"
           }
         }
       }
