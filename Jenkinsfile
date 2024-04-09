@@ -15,7 +15,7 @@ pipeline {
               title: 'This is Title',
               text: 'I am Groot!',
               color: 'good'
-              "fields": [
+              fields: [
               {
                   "title": "Priority",
                   "value": "High",
