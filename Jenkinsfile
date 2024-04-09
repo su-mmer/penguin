@@ -9,16 +9,29 @@ pipeline {
   stages {
     stage('Slack: Confirm to Deploy') {
       steps {
+        input {
+        message "Approve Deploy"
+        ok "Yes"
+        parameters {
+          string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+        }
+      }
+      steps {
+        echo "This is Your Answer: ${Answer}"
+      }
+      }
+      post {
+
         script {
           def attachments = [
             [
               title: 'Jenkins 배포 시작 승인 요청',
-              text: 'URL 접속 후 승인',
+              text: 'URL 접속하여 승인 해주십시오.',
               color: '#45aaf2',
               fields: [
                 [
                   title: 'URL',
-                  value: "${env.BUILD_URL}",
+                  value: "${env.BUILD_URL}",  // URL 변경 필요
                   // short: false
                 ]
               ],
@@ -28,20 +41,21 @@ pipeline {
           slackSend(channel: "#alarm-test", attachments: attachments)
         }
       }
+      
     }
 
-    stage('Jenkins Approve Message') {
-      input {
-          message "Approve Deploy"
-          ok "Yes"
-          parameters {
-              string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
-          }
-      }
-      steps {
-        echo "This is Your Answer: ${Answer}"
-      }
-    }
+    // stage('Jenkins Approve Message') {
+    //   input {
+    //     message "Approve Deploy"
+    //     ok "Yes"
+    //     parameters {
+    //       string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+    //     }
+    //   }
+    //   steps {
+    //     echo "This is Your Answer: ${Answer}"
+    //   }
+    // }
 
     stage('ssh to comm and execute war') {
       steps {
