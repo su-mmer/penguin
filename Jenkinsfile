@@ -67,15 +67,16 @@ pipeline {
           }
         }
       }
-    }
-    post {
-      success {
-        slackSend (channel: '#alarm-test', color: 'good', message: "Deploy Application SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      post {
+        success {
+          slackSend (channel: '#alarm-test', color: 'good', message: "Deploy Application SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+        failure {
+          slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n (${env.BUILD_URL})")
+        }
       }
-      failure {
-        slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n (${env.BUILD_URL})")
-      }
     }
+    
 
     // slack 1:9 실행합니다
     stage('LB 10:90') {
