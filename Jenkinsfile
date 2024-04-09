@@ -1,5 +1,5 @@
 // def PORT
-def FLAG
+def FLAG="FAIL"
 
 pipeline {
   agent any
@@ -7,7 +7,7 @@ pipeline {
   //   FLAG="FAIL"
   // }
   stages {
-    stage('Confirm to Deploy') {
+    stage('Slack: Confirm to Deploy') {
       steps {
         script {
           def attachments = [
@@ -28,9 +28,6 @@ pipeline {
           slackSend(channel: "#alarm-test", attachments: attachments)
         }
       }
-    }
-
-    stage('Alert Message') {
       input {
           message "Approve Deploy"
           ok "Yes"
@@ -42,6 +39,19 @@ pipeline {
         echo "This is Your Answer: ${Answer}"
       }
     }
+
+    // stage('Jenkins Approve Message') {
+    //   input {
+    //       message "Approve Deploy"
+    //       ok "Yes"
+    //       parameters {
+    //           string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+    //       }
+    //   }
+    //   steps {
+    //     echo "This is Your Answer: ${Answer}"
+    //   }
+    // }
 
     stage('ssh to comm and execute war') {
       steps {
@@ -55,24 +65,37 @@ pipeline {
             ./findport.sh
             '
             ''', returnStdout:true).trim()
-            // echo "PORT: ${PORT}"
+            echo "FLAG: ${FLAG}"
           }
         }
       }
     }
-
-    stage('application success') {
-      // when {
-      //   expression { "${FLAG}"=="200" }
-      // }
-      steps {
-      //   script {
-      //     sh /home/ubuntu/LB/war1-100.sh
-
-      //   }
-        sh (script: 'sh /home/ubuntu/LB/war1-100.sh')
+    post {
+      success {
+        slackSend (channel: '#alarm-test', color: 'good', message: "Deploy Application SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
       }
-      // sh '/home/ubuntu/LB/war1-100.sh'
+      failure {
+        slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n (${env.BUILD_URL})")
+      }
+    }
+
+    // slack 1:9 실행합니다
+    stage('LB 10:90') {
+      when {
+        expression { "${FLAG}"=="SUCCESS:8081" }
+      }
+      steps {
+        // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
+        sh (script: 'echo "10:90"')
+        sleep 300  // 300초 대기
+      }
+    }
+    // slack 0:10 실행합니다
+    stage('LB 0:100') {
+      steps {
+        // sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
+        sh (script: 'echo "0:100"')
+      }
     }
     
   }
