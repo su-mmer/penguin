@@ -3,7 +3,6 @@ def PORT
 pipeline {
   agent any
   environment {
-    DEVBUCKET="${BUCKET}"
     FLAG="FAIL"
   }
   stages {
@@ -68,7 +67,7 @@ pipeline {
       steps {
         script{
           sleep 10
-          def RESPONSE_CODE = httpRequest "http://${target}:80"
+          def RESPONSE_CODE = httpRequest "http://${LB}:80"
           FLAG="${RESPONSE_CODE.status}"
           echo "${FLAG}"
         }
