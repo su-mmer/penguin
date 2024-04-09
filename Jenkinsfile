@@ -73,6 +73,9 @@ pipeline {
           echo "${FLAG}"
         }
       }
+    }
+
+    stage('application success') {
       when {
         expression { "${FLAG}"=="200" }
       }
@@ -82,17 +85,6 @@ pipeline {
         }
       }
     }
-
-    // stage('application success') {
-    //   when {
-    //     expression { "${FLAG}"=="200" }
-    //   }
-    //   steps {
-    //     script {
-    //       echo "success"
-    //     }
-    //   }
-    // }
     
   }
 }
