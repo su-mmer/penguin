@@ -14,9 +14,9 @@ pipeline {
         parameters {
           string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
         }
+      }
       steps {
         echo "This is Your Answer: ${Answer}"
-      }
       }
       post {
         success{
