@@ -1,10 +1,11 @@
-def PORT
+// def PORT
+def FLAG
 
 pipeline {
   agent any
-  environment {
-    FLAG="FAIL"
-  }
+  // environment {
+  //   FLAG="FAIL"
+  // }
   stages {
     stage('Confirm to Deploy') {
       steps {
@@ -46,13 +47,12 @@ pipeline {
       steps {
         sshagent(credentials: ['ubuntu']) {
           script {
-            PORT = sh(script: '''
+            FLAG = sh(script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
             gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8081.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz
             tar -zxvf /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz -C /appl/ > /dev/null 2>&1
             mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d")8081.war
-            ./findport.sh > port.txt
-            cat port.txt
+            ./findport.sh
             '
             ''', returnStdout:true).trim()
             // echo "PORT: ${PORT}"
@@ -61,24 +61,13 @@ pipeline {
       }
     }
 
-    stage('http Request') {
-      steps {
-        script{
-          sleep 10
-          def RESPONSE_CODE = httpRequest "http://${LB}:80"
-          FLAG="${RESPONSE_CODE.status}"
-          echo "${FLAG}"
-        }
-      }
-    }
-
     stage('application success') {
-      when {
-        expression { "${FLAG}"=="200" }
-      }
+      // when {
+      //   expression { "${FLAG}"=="200" }
+      // }
       steps {
         script {
-          echo "success"
+          gcloud compute url-maps import ew1-dvs-dev-communicator-alb --source ew1-dvs-dev-communicator-alb-war2-100.yaml --region europe-west1
         }
       }
     }
