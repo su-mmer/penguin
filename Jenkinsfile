@@ -9,25 +9,26 @@ pipeline {
   stages {
     stage('Slack: Confirm to Deploy') {
       steps {
-        def attachments = [
-          [
-            title: 'Jenkins 배포 시작 승인 요청',
-            text: 'URL 접속하여 승인 해주십시오.',
-            color: '#45aaf2',
-            fields: [
-              [
-                title: 'URL',
-                value: "${env.BUILD_URL}",  // URL 변경 필요
-                // short: false
-              ]
-            ],
-            footer: "Message from DEV"
+        script {
+          def attachments = [
+            [
+              title: 'Jenkins 배포 시작 승인 요청',
+              text: 'URL 접속하여 승인 해주십시오.',
+              color: '#45aaf2',
+              fields: [
+                [
+                  title: 'URL',
+                  value: "${env.BUILD_URL}",  // URL 변경 필요
+                  // short: false
+                ]
+              ],
+              footer: "Message from DEV"
+            ]
           ]
-        ]
-        slackSend(channel: "#alarm-test", attachments: attachments)
+          slackSend(channel: "#alarm-test", attachments: attachments)
         }
       }
-      
+    }
 
     stage('Jenkins Approve Message') {
       input {
