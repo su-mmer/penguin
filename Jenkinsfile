@@ -21,7 +21,10 @@ pipeline {
       }
       }
       post {
+        success{
+
         slacksend(channel: "#alarm-test", message: "Hello")
+        }
         // script {
         //   def attachments = [
         //     [
