@@ -65,13 +65,13 @@ pipeline {
       // when {
       //   expression { "${FLAG}"=="200" }
       // }
-      // steps {
+      steps {
       //   script {
       //     sh /home/ubuntu/LB/war1-100.sh
 
       //   }
-      // }
-      sh (script: 'sh /home/ubuntu/LB/war1-100.sh')
+        sh (script: 'sh /home/ubuntu/LB/war1-100.sh')
+      }
       // sh '/home/ubuntu/LB/war1-100.sh'
     }
     
