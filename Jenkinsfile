@@ -28,31 +28,20 @@ pipeline {
           slackSend(channel: "#alarm-test", attachments: attachments)
         }
       }
-      post {
-        success {
-          input {
-            message "Approve Deploy"
-            ok "Yes"
-            parameters {
-              string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
-            }
-          }
-        }
-      }
     }
 
-    // stage('Jenkins Approve Message') {
-    //   input {
-    //       message "Approve Deploy"
-    //       ok "Yes"
-    //       parameters {
-    //           string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
-    //       }
-    //   }
-    //   steps {
-    //     echo "This is Your Answer: ${Answer}"
-    //   }
-    // }
+    stage('Jenkins Approve Message') {
+      input {
+          message "Approve Deploy"
+          ok "Yes"
+          parameters {
+              string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+          }
+      }
+      // steps {
+      //   echo "This is Your Answer: ${Answer}"
+      // }
+    }
 
     stage('ssh to comm and execute war') {
       steps {
