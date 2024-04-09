@@ -13,16 +13,16 @@ pipeline {
           def attachments = [
             [
               title: 'Jenkins 배포 승인 요청',
-              text: '"${env.BUILD_URL}"에 접속 후 승인 요청',
+              text: '${env.BUILD_URL}에 접속 후 승인 요청',
               color: '#45aaf2',
-              // fields: [
-              //   [
-              //     title: 'URL',
-              //     value: "${env.BUILD_URL}",
-              //     short: false
-              //   ]
-              // ],
-              footer: "Message from Jenkins"
+              fields: [
+                [
+                  title: 'URL',
+                  value: "${env.BUILD_URL}",
+                  // short: false
+                ]
+              ],
+              footer: "Message from DEV"
             ]
           ]
           slackSend(channel: "#alarm-test", attachments: attachments)
