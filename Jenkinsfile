@@ -64,26 +64,26 @@ pipeline {
       }
     }
 
-    // stage('http Request') {
-    //   steps {
-    //     script{
-    //       def RESPONSE_CODE = httpRequest "http://${target}:${EUNHO}"
-    //       FLAG="${RESPONSE_CODE.status}"
-    //       echo "${FLAG}"
-    //     }
-    //   }
-    // }
+    stage('http Request') {
+      steps {
+        script{
+          def RESPONSE_CODE = httpRequest "http://${target}:80"
+          FLAG="${RESPONSE_CODE.status}"
+          echo "${FLAG}"
+        }
+      }
+    }
 
-    // stage('application success') {
-    //   when {
-    //     expression { "${FLAG}"=="200" }
-    //   }
-    //   steps {
-    //     script {
-    //       echo "success"
-    //     }
-    //   }
-    // }
+    stage('application success') {
+      when {
+        expression { "${FLAG}"=="200" }
+      }
+      steps {
+        script {
+          echo "success"
+        }
+      }
+    }
     
   }
 }
