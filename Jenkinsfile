@@ -12,8 +12,8 @@ pipeline {
         script {
           def attachments = [
             [
-              title: 'Jenkins 배포 승인 요청',
-              text: '${env.BUILD_URL}에 접속 후 승인 요청',
+              title: 'Jenkins 배포 시작 승인 요청',
+              text: 'URL 접속 후 승인',
               color: '#45aaf2',
               fields: [
                 [
