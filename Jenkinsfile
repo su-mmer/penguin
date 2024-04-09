@@ -27,15 +27,13 @@ pipeline {
           ]
           slackSend(channel: "#alarm-test", attachments: attachments)
         }
-      }
-      input {
-          message "Approve Deploy"
-          ok "Yes"
-          parameters {
+        input {
+            message "Approve Deploy"
+            ok "Yes"
+            parameters {
               string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
-          }
-      }
-      steps {
+            }
+        }
         echo "This is Your Answer: ${Answer}"
       }
     }
