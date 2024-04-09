@@ -8,14 +8,12 @@ pipeline {
   // }
   stages {
     stage('Slack: Confirm to Deploy') {
-      steps {
-        input {
+      input {
         message "Approve Deploy"
         ok "Yes"
         parameters {
           string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
         }
-      }
       steps {
         echo "This is Your Answer: ${Answer}"
       }
