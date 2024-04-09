@@ -18,13 +18,14 @@ pipeline {
               text: 'I am Groot!',
               color: 'good',
               fields: [
-                {
+                [
                   title: 'Hello',
                   value: 'High',
                   short: false
-                }
+                ]
               ],
               footer: "Message from Jenkins"
+            ]
           ]
           slackSend(channel: "#alarm-test", attachments: attachments)
         }
