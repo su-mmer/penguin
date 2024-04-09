@@ -37,11 +37,11 @@ pipeline {
           message "Approve Deploy"
           ok "Yes"
           parameters {
-              string(name: 'Choose', defaultValue: 'Yes', description: 'You can say "Yes" or "No"')
+              string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
           }
       }
       steps {
-        echo "This is Your ${Choose}"
+        echo "This is Your Answer: ${Answer}"
       }
     }
 
@@ -67,14 +67,12 @@ pipeline {
     stage('http Request') {
       steps {
         script{
+          sleep 10
           def RESPONSE_CODE = httpRequest "http://${target}:80"
           FLAG="${RESPONSE_CODE.status}"
           echo "${FLAG}"
         }
       }
-    }
-
-    stage('application success') {
       when {
         expression { "${FLAG}"=="200" }
       }
@@ -84,6 +82,17 @@ pipeline {
         }
       }
     }
+
+    // stage('application success') {
+    //   when {
+    //     expression { "${FLAG}"=="200" }
+    //   }
+    //   steps {
+    //     script {
+    //       echo "success"
+    //     }
+    //   }
+    // }
     
   }
 }
