@@ -87,12 +87,17 @@ pipeline {
               string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽의 10%를 Backend2로 전환하시겠습니까?')
             }
           }
+          steps {
+            echo "This is Your Answer: ${Answer}"
+          }
         }
         stage('90:10') {
           // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
-          script {
-            sh (script: 'echo "90:10"')
-            sleep 300  // 300초 대기
+          steps {
+            script {
+              sh (script: 'echo "90:10"')
+              sleep 300  // 300초 대기
+            }
           }
         }
         stage ('0:100 approve request to slack') {
@@ -102,9 +107,11 @@ pipeline {
         }
         stage('0:100') {
           // sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
-          script {
-            sh (script: 'echo "0:100"')
-            sleep 300  // 300초 대기
+          steps {
+            script {
+              sh (script: 'echo "0:100"')
+              sleep 300  // 300초 대기
+            }
           }
         }
       }
