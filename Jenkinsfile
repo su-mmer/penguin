@@ -59,32 +59,67 @@ pipeline {
           }
         }
       }
-      post {
-        success {
-          slackSend (channel: '#alarm-test', color: 'good', message: "어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 승인을 요청합니다.\n${env.BUILD_URL}")
-        }
-        failure {
-          slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n ${env.BUILD_URL}")
-        }
-      }
+      // post {
+      //   success {
+      //     slackSend (channel: '#alarm-test', color: 'good', message: "어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 승인을 요청합니다.\n${env.BUILD_URL}")
+      //   }
+      //   failure {
+      //     slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n ${env.BUILD_URL}")
+      //   }
+      // }
     }
     
-
-    stage('LB 10:90 Message') {
+    stage('8081 port') {
       when {
         expression { "${FLAG}"=="SUCCESS:8081" }
-        input {
-          message "Approve Deploy"
-          ok "Yes"
-          parameters {
-            string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+      }
+      stages {
+        stage ('90:10 approve request to slack') {
+          slackSend (channel: '#alarm-test', color: 'good', message: "8081 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.BUILD_URL}")
+        } 
+        stage ('90:10 approve message'){
+          input {
+            message "Approve to Change traffic"
+            ok "Yes"
+            parameters {
+              string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽의 10%를 Backend2로 전환하시겠습니까?')
+            }
           }
         }
+        stage('90:10') {
+          // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
+          sh (script: 'echo "90:10"')
+          sleep 300  // 300초 대기
+        }
+        stage ('0:100 approve request to slack') {
+          slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
+        }
+        stage('0:100') {
+          // sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
+          sh (script: 'echo "0:100"')
+          sleep 300  // 300초 대기
+        }
       }
-      steps {
-        echo "This is Your Answer: ${Answer}"
-      }
+      // steps {
+      //   echo "This is Your Answer: ${Answer}"
+      // }
     }
+    
+    // stage('LB 10:90 Message') {
+    //   when {
+    //     expression { "${FLAG}"=="SUCCESS:8081" }
+    //     input {
+    //       message "Approve Deploy"
+    //       ok "Yes"
+    //       parameters {
+    //         string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+    //       }
+    //     }
+    //   }
+    //   steps {
+    //     echo "This is Your Answer: ${Answer}"
+    //   }
+    // }
 
     // stage('LB 10:90') {
     //   when {
