@@ -91,15 +91,15 @@ pipeline {
             echo "This is Your Answer: ${Answer}"
           }
         }
-        // stage('90:10') {
-        //   // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
-        //   steps {
-        //     script {
-        //       sh (script: 'echo "90:10"')
-        //       sleep 300  // 300초 대기
-        //     }
-        //   }
-        // }
+        stage('90:10') {
+          // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
+          steps {
+            script {
+              sh (script: 'echo "90:10"')
+              sleep 3  // TODO 300초 대기로 변경 필요
+            }
+          }
+        }
         // stage ('0:100 approve request to slack') {
         //   steps {
         //     slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
