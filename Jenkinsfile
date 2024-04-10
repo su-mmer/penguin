@@ -1,5 +1,5 @@
 // def PORT
-def FLAG="SUCCESS:8081"
+def FLAG="FAIL"
 
 pipeline {
   agent any
@@ -43,31 +43,23 @@ pipeline {
       }
     }
 
-    // stage('ssh to comm and execute war') {
-    //   steps {
-        // sshagent(credentials: ['ubuntu']) {
-        //   script {
-        //     FLAG = sh(script: '''
-        //     ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-        //     gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8081.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz
-        //     tar -zxvf /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz -C /appl/ > /dev/null 2>&1
-        //     mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d")8081.war
-        //     ./findport.sh
-        //     '
-        //     ''', returnStdout:true).trim()
-        //     echo "FLAG: ${FLAG}"
-        //   }
-        // }
-      // }
-      // post {
-      //   success {
-      //     slackSend (channel: '#alarm-test', color: 'good', message: "어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 승인을 요청합니다.\n${env.BUILD_URL}")
-      //   }
-      //   failure {
-      //     slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n ${env.BUILD_URL}")
-      //   }
-      // }
-    // }
+    stage('ssh to comm and execute war') {
+      steps {
+        sshagent(credentials: ['ubuntu']) {
+          script {
+            FLAG = sh(script: '''
+            ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
+            gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8081.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz
+            tar -zxvf /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz -C /appl/ > /dev/null 2>&1
+            mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d")8081.war
+            ./findport.sh
+            '
+            ''', returnStdout:true).trim()
+            echo "FLAG: ${FLAG}"
+          }
+        }
+      }
+    }
     
     stage('8081 port') {
       when {
@@ -92,30 +84,77 @@ pipeline {
           }
         }
         stage('90:10') {
-          // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
           steps {
             script {
-              sh (script: 'echo "90:10"')
-              sleep 3  // TODO 300초 대기로 변경 필요
+              sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
+              // sh (script: 'echo "90:10"')
+              sleep 300
             }
           }
         }
-        // stage ('0:100 approve request to slack') {
-        //   steps {
-        //     slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
-        //   }
-        // }
-        // stage('0:100') {
-        //   // sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
-        //   steps {
-        //     script {
-        //       sh (script: 'echo "0:100"')
-        //       sleep 300  // 300초 대기
-        //     }
-        //   }
-        // }
+        stage ('0:100 approve request to slack') {
+          steps {
+            slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
+          }
+        }
+        stage('0:100') {
+          steps {
+            script {
+              sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
+              // sh (script: 'echo "0:100"')
+              sleep 300  // 300초 대기
+            }
+          }
+        }
       }
+    }
 
+    stage('8080 port') {
+      when {
+        expression { "${FLAG}"=="SUCCESS:8080" }
+      }
+      stages {
+        stage ('10:90 approve request to slack') {
+          steps {
+            slackSend (channel: '#alarm-test', color: 'good', message: "8080 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.BUILD_URL}")
+          }
+        } 
+        stage ('10:90 approve message'){
+          input {
+            message "Approve to Change traffic"
+            ok "Yes"
+            parameters {
+              string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽의 10%를 Backend1로 전환하시겠습니까?')
+            }
+          }
+          steps {
+            echo "This is Your Answer: ${Answer}"
+          }
+        }
+        stage('10:90') {
+          steps {
+            script {
+              // sh (script: 'echo "10:90"')
+              sh (script: 'sh /home/ubuntu/LB/alb-10-90.sh')
+              sleep 300
+            }
+          }
+        }
+        stage ('100:0 approve request to slack') {
+          steps {
+            slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
+          }
+        }
+        stage('100:0') {
+          steps {
+            script {
+              sh (script: 'sh /home/ubuntu/LB/alb-100-0.sh')
+              // sh (script: 'echo "100:0"')
+              sleep 300  // 300초(5분) 대기
+            }
+          }
+        }
+      }
     }
     
     // stage('LB 10:90 Message') {
