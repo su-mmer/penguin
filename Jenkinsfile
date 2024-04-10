@@ -1,5 +1,5 @@
 // def PORT
-def FLAG=""SUCCESS:8081""
+def FLAG="SUCCESS:8081"
 
 pipeline {
   agent any
