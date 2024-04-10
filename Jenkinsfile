@@ -43,8 +43,8 @@ pipeline {
       }
     }
 
-    stage('ssh to comm and execute war') {
-      steps {
+    // stage('ssh to comm and execute war') {
+    //   steps {
         // sshagent(credentials: ['ubuntu']) {
         //   script {
         //     FLAG = sh(script: '''
@@ -58,7 +58,7 @@ pipeline {
         //     echo "FLAG: ${FLAG}"
         //   }
         // }
-      }
+      // }
       // post {
       //   success {
       //     slackSend (channel: '#alarm-test', color: 'good', message: "어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 승인을 요청합니다.\n${env.BUILD_URL}")
@@ -67,7 +67,7 @@ pipeline {
       //     slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins Job FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'\n ${env.BUILD_URL}")
       //   }
       // }
-    }
+    // }
     
     stage('8081 port') {
       when {
