@@ -75,7 +75,9 @@ pipeline {
       }
       stages {
         stage ('90:10 approve request to slack') {
-          slackSend (channel: '#alarm-test', color: 'good', message: "8081 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.BUILD_URL}")
+          steps {
+            slackSend (channel: '#alarm-test', color: 'good', message: "8081 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.BUILD_URL}")
+          }
         } 
         stage ('90:10 approve message'){
           input {
@@ -88,16 +90,22 @@ pipeline {
         }
         stage('90:10') {
           // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
-          sh (script: 'echo "90:10"')
-          sleep 300  // 300초 대기
+          script {
+            sh (script: 'echo "90:10"')
+            sleep 300  // 300초 대기
+          }
         }
         stage ('0:100 approve request to slack') {
-          slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
+          steps {
+            slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
+          }
         }
         stage('0:100') {
           // sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
-          sh (script: 'echo "0:100"')
-          sleep 300  // 300초 대기
+          script {
+            sh (script: 'echo "0:100"')
+            sleep 300  // 300초 대기
+          }
         }
       }
       // steps {
