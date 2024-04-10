@@ -1,5 +1,5 @@
 // def PORT
-def FLAG="FAIL"
+def FLAG=""SUCCESS:8081""
 
 pipeline {
   agent any
@@ -58,9 +58,6 @@ pipeline {
         //     echo "FLAG: ${FLAG}"
         //   }
         // }
-        script {
-          ${FLAG}="SUCCESS:8081"
-        }
       }
       // post {
       //   success {
