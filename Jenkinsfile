@@ -1,11 +1,7 @@
-// def PORT
 def FLAG="FAIL"
 
 pipeline {
   agent any
-  // environment {
-  //   FLAG="FAIL"
-  // }
   stages {
     stage('Slack: Confirm to Deploy') {
       steps {
@@ -87,8 +83,7 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
-              // sh (script: 'echo "90:10"')
-              sleep 300
+              sleep 300  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -101,8 +96,7 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
-              // sh (script: 'echo "0:100"')
-              sleep 300  // 300초 대기
+              sleep 300  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -134,9 +128,8 @@ pipeline {
         stage('10:90') {
           steps {
             script {
-              // sh (script: 'echo "10:90"')
               sh (script: 'sh /home/ubuntu/LB/alb-10-90.sh')
-              sleep 300
+              sleep 300  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -149,47 +142,11 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-100-0.sh')
-              // sh (script: 'echo "100:0"')
-              sleep 300  // 300초(5분) 대기
+              sleep 300  // TODO 웨이팅 시간 맞추기
             }
           }
         }
       }
     }
-    
-    // stage('LB 10:90 Message') {
-    //   when {
-    //     expression { "${FLAG}"=="SUCCESS:8081" }
-    //     input {
-    //       message "Approve Deploy"
-    //       ok "Yes"
-    //       parameters {
-    //         string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
-    //       }
-    //     }
-    //   }
-    //   steps {
-    //     echo "This is Your Answer: ${Answer}"
-    //   }
-    // }
-
-    // stage('LB 10:90') {
-    //   when {
-    //     expression { "${FLAG}"=="SUCCESS:8081" }
-    //   }
-    //   steps {
-    //     // sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
-    //     sh (script: 'echo "10:90"')
-    //     sleep 300  // 300초 대기
-    //   }
-    // }
-    // slack 0:10 실행합니다
-    // stage('LB 0:100') {
-    //   steps {
-    //     // sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
-    //     sh (script: 'echo "0:100"')
-    //   }
-    // }
-    
   }
 }
