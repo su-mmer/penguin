@@ -45,18 +45,21 @@ pipeline {
 
     stage('ssh to comm and execute war') {
       steps {
-        sshagent(credentials: ['ubuntu']) {
-          script {
-            FLAG = sh(script: '''
-            ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-            gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8081.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz
-            tar -zxvf /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz -C /appl/ > /dev/null 2>&1
-            mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d")8081.war
-            ./findport.sh
-            '
-            ''', returnStdout:true).trim()
-            echo "FLAG: ${FLAG}"
-          }
+        // sshagent(credentials: ['ubuntu']) {
+        //   script {
+        //     FLAG = sh(script: '''
+        //     ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
+        //     gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8081.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz
+        //     tar -zxvf /appl/communicator-$(date "+%Y-%m-%d")8081.tar.gz -C /appl/ > /dev/null 2>&1
+        //     mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d")8081.war
+        //     ./findport.sh
+        //     '
+        //     ''', returnStdout:true).trim()
+        //     echo "FLAG: ${FLAG}"
+        //   }
+        // }
+        script {
+          ${FLAG}="SUCCESS:8081"
         }
       }
       // post {
