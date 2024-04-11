@@ -14,7 +14,7 @@ pipeline {
               fields: [
                 [
                   title: 'URL',
-                  value: "${env.JENKINS_URL}/blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline"//"${env.BUILD_URL}",  // URL 변경 필요
+                  value: "${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline"//"${env.BUILD_URL}",
                   // short: false
                 ]
               ],
@@ -64,7 +64,7 @@ pipeline {
       stages {
         stage ('90:10 approve request to slack') {
           steps {
-            slackSend (channel: '#alarm-test', color: 'good', message: "8081 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.BUILD_URL}")
+            slackSend (channel: '#alarm-test', color: 'good', message: "8081 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
           }
         } 
         stage ('90:10 approve message'){
@@ -122,7 +122,7 @@ pipeline {
       stages {
         stage ('10:90 approve request to slack') {
           steps {
-            slackSend (channel: '#alarm-test', color: 'good', message: "8080 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.BUILD_URL}")
+            slackSend (channel: '#alarm-test', color: 'good', message: "8080 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
           }
         } 
         stage ('10:90 approve message'){
