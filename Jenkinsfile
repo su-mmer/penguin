@@ -141,7 +141,7 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-10-90.sh')
-              sleep 30  // TODO 웨이팅 시간 맞추기
+              sleep 15  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -166,7 +166,7 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-100-0.sh')
-              sleep 30  // TODO 웨이팅 시간 맞추기
+              sleep 15  // TODO 웨이팅 시간 맞추기
             }
           }
         }
