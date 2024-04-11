@@ -14,7 +14,7 @@ pipeline {
               fields: [
                 [
                   title: 'URL',
-                  value: "${env.BUILD_URL}",  // URL 변경 필요
+                  value: "${env.JENKINS_URL}/blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline"//"${env.BUILD_URL}",  // URL 변경 필요
                   // short: false
                 ]
               ],
