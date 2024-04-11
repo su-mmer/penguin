@@ -89,7 +89,7 @@ pipeline {
         }
         stage ('0:100 approve request to slack') {
           steps {
-            slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
+            slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
           }
         }
         stage ('0:100 approve message'){
@@ -147,7 +147,7 @@ pipeline {
         }
         stage ('100:0 approve request to slack') {
           steps {
-            slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
+            slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
           }
         }
         stage ('100:0 approve message'){
