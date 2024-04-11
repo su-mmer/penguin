@@ -42,7 +42,7 @@ pipeline {
     stage('ssh to comm and execute war') {
       steps {
         sshagent(credentials: ['ubuntu']) {
-          script {  // TODO port 변경
+          script {
             FLAG = sh(script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
             gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8080.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8080.tar.gz
@@ -83,7 +83,7 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
-              sleep 300  // TODO 웨이팅 시간 맞추기
+              sleep 30  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -92,11 +92,23 @@ pipeline {
             slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
           }
         }
+        stage ('0:100 approve message'){
+          input {
+            message "Approve to Change traffic"
+            ok "Yes"
+            parameters {
+              string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽의 10%를 Backend2로 전환하시겠습니까?')
+            }
+          }
+          steps {
+            echo "This is Your Answer: ${Answer}"
+          }
+        }
         stage('0:100') {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
-              sleep 300  // TODO 웨이팅 시간 맞추기
+              sleep 30  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -118,7 +130,7 @@ pipeline {
             message "Approve to Change traffic"
             ok "Yes"
             parameters {
-              string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽의 10%를 Backend1로 전환하시겠습니까?')
+              string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 Backend1로 100% 전환하시겠습니까?')
             }
           }
           steps {
@@ -129,7 +141,7 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-10-90.sh')
-              sleep 300  // TODO 웨이팅 시간 맞추기
+              sleep 30  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -138,11 +150,23 @@ pipeline {
             slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.BUILD_URL}")
           }
         }
+        stage ('100:0 approve message'){
+          input {
+            message "Approve to Change traffic"
+            ok "Yes"
+            parameters {
+              string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 Backend2로 100% 전환하시겠습니까?')
+            }
+          }
+          steps {
+            echo "This is Your Answer: ${Answer}"
+          }
+        }
         stage('100:0') {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-100-0.sh')
-              sleep 300  // TODO 웨이팅 시간 맞추기
+              sleep 30  // TODO 웨이팅 시간 맞추기
             }
           }
         }
