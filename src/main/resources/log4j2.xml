@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<properties>
+		<property name="log_path">${sys:user.home}/${service_name}/logs</property>
+		<property name="log_path">/logs</property>
+	</properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="$d{yyyy-MM-dd HH:mm:ss} [%thread][%-5level][%class{0}] %msg%n" />
+		</Console>
+	
+		<RollingFile name="RollingFile"
+			     fileName="${log_path}/pat_{service_name}.log"
+			     filePattern="${log_path}/$${date:yyyy-MM}/pat_${service_name}_%d{-dd-MMMM-yyyy}-%i.log.gz">
+			<PatternLayout>
+				<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [$thread][%-5level][$class{0}] %msg%n"</pattern>
+			</PatternLayout>
+			<Policies>
+				<!-- rollover on startup, daily and when the file reaches 10MB -->
+				<OnStartupTriggeringPolicy />
+				<SizeBasedTriggeringPolicy 
+					size="100 MB" />
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	
+	<Loggers>
+		<!-- LOG everything at INFO level -->
+		<Root level="info">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+		<!-- LOG "com.sec*" at TRACE level -->
+		<Logger name="com.sec" level="info"></Logger>
+		<Logger name="org.hibernate.SQL" level="debug"></Logger>
+		<Logger name="org.springframework.jdbc" level="info"></Logger>
+	</Loggers>
+
+</Configuration>
