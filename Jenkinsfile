@@ -49,10 +49,8 @@ pipeline {
           script {
             FLAG = sh(script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-            gcloud storage cp gs://ew1-dvs-dev-storage/communicator-$(date "+%Y-%m-%d")8080.tar.gz /appl/communicator-$(date "+%Y-%m-%d")8080.tar.gz
-            tar -zxvf /appl/communicator-$(date "+%Y-%m-%d")8080.tar.gz -C /appl/ > /dev/null 2>&1
-            mv /appl/penguin-0.0.1-SNAPSHOT.war /appl/communicator-$(date "+%Y-%m-%d")8080.war
-            ./findport.sh
+            ./1-tardownload.sh
+            ./2-findport.sh > port.txt
             '
             ''', returnStdout:true).trim()
             echo "FLAG: ${FLAG}"
@@ -63,8 +61,9 @@ pipeline {
     
     stage('8081 port') {
       when {
-        expression { "${FLAG}"=="SUCCESS:8081" }
+        expression { "${FLAG}"=="8081" }
       }
+
       stages {
         stage ('90:10 approve request to slack') {
           steps {
@@ -120,9 +119,9 @@ pipeline {
     }
 
     stage('8080 port') {
-      when {
-        expression { "${FLAG}"=="SUCCESS:8080" }
-      }
+      // when {
+      //   expression { "${FLAG}"=="SUCCESS:8080" }
+      // }
       stages {
         stage ('10:90 approve request to slack') {
           steps {
@@ -144,8 +143,7 @@ pipeline {
         stage('10:90') {
           steps {
             script {
-              sh (script: 'sh /home/ubuntu/LB/alb-10-90.sh')
-              sleep 15  // TODO 웨이팅 시간 맞추기
+              sh (script: 'sh /home/ubuntu/LB/${FLAG}-1.sh')
             }
           }
         }
@@ -169,8 +167,7 @@ pipeline {
         stage('100:0') {
           steps {
             script {
-              sh (script: 'sh /home/ubuntu/LB/alb-100-0.sh')
-              sleep 15  // TODO 웨이팅 시간 맞추기
+              sh (script: 'sh /home/ubuntu/LB/${flag}-2.sh')
             }
           }
         }
