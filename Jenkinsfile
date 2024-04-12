@@ -1,41 +1,45 @@
 def FLAG="FAIL"
+def PORT
 
 pipeline {
   agent any
   stages {
-    stage('Slack: Confirm to Deploy') {
-      steps {
-        script {
-          def attachments = [
-            [
-              title: 'Jenkins 배포 시작 승인 요청',
-              text: 'URL 접속하여 승인 해주십시오.',
-              color: '#45aaf2',
-              fields: [
+    stage('Message: Confirm to Deploy') {
+      parallel {
+        stage ('Slack: Confirm to Deploy') {
+          steps {
+            script {
+              def attachments = [
                 [
-                  title: 'URL',
-                  value: "${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline"//"${env.BUILD_URL}",
-                  // short: false
+                  title: 'Jenkins 배포 시작 승인 요청',
+                  text: 'URL 접속하여 승인 해주십시오.',
+                  color: '#45aaf2',
+                  fields: [
+                    [
+                      title: 'URL',
+                      value: "${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline"//"${env.BUILD_URL}",
+                      // short: false
+                    ]
+                  ],
+                  footer: "Message from DEV"
                 ]
-              ],
-              footer: "Message from DEV"
-            ]
-          ]
-          slackSend(channel: "#alarm-test", attachments: attachments)
+              ]
+              slackSend(channel: "#alarm-test", attachments: attachments)
+            }
+          }
         }
-      }
-    }
-
-    stage('Jenkins Approve Message') {
-      input {
-        message "Approve Deploy"
-        ok "Yes"
-        parameters {
-          string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+        stage('Jenkins Approve Message') {
+          input {
+            message "Approve Deploy"
+            ok "Yes"
+            parameters {
+              string(name: 'Answer', defaultValue: 'Yes', description: 'If you want to Deploy, say Yes')
+            }
+          }
+          steps {
+            echo "This is Your Answer: ${Answer}"
+          }
         }
-      }
-      steps {
-        echo "This is Your Answer: ${Answer}"
       }
     }
 
