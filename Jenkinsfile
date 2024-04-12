@@ -113,13 +113,13 @@ pipeline {
           }
         }
       }
-    post {
-      success {
-        slackSend (channel: '#alarm-test', color: 'good', message: "Jenkins 실행 완료\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
-      }
-      failure {
-        slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins 실패\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
-      }
+    }
+  post {
+    success {
+      slackSend (channel: '#alarm-test', color: 'good', message: "Jenkins 실행 완료\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
+    }
+    failure {
+      slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins 실패\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
     }
   }
 }
