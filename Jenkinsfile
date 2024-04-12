@@ -86,7 +86,6 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-90-10.sh')
-              sleep 30  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -111,7 +110,6 @@ pipeline {
           steps {
             script {
               sh (script: 'sh /home/ubuntu/LB/alb-0-100.sh')
-              sleep 30  // TODO 웨이팅 시간 맞추기
             }
           }
         }
@@ -138,18 +136,16 @@ pipeline {
           }
           steps {
             echo "This is Your Answer: ${Answer}"
+            sh """sh /home/ubuntu/LB/${FLAG}-1.sh"""
           }
         }
-        stage('10:90') {
-          steps {
-            // script {
-              // sh (script: 'sh /home/ubuntu/LB/${FLAG}-1.sh')
-            // }
-            script {
-              sh 'sh /home/ubuntu/LB/${FLAG}-1.sh'
-            }
-          }
-        }
+        // stage('10:90') {
+        //   steps {
+        //     script {
+        //       sh 'sh /home/ubuntu/LB/${FLAG}-1.sh'
+        //     }
+        //   }
+        // }
         stage ('100:0 approve request to slack') {
           steps {
             slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
