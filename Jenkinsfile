@@ -1,4 +1,4 @@
-def FLAG=NULL
+def FLAG
 
 pipeline {
   agent any
@@ -40,8 +40,7 @@ pipeline {
             sshagent(credentials: ['ubuntu']) {
             script {
               FLAG = sh(script: '''
-              ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-              ./0-kill.sh
+              ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST} '
               ./1-tardownload.sh
               ./2-findport.sh
               '
@@ -61,8 +60,7 @@ pipeline {
     // }
 
     stage('트래픽 10% 전환') {
-      // stages {
-        parallel {  // 10% traffic 요청
+        parallel {
           stage ('Slack: 10% 전환 요청') {
             steps {
               slackSend (channel: '#alarm-test', color: 'good', message: "${FLAG} 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
@@ -85,7 +83,7 @@ pipeline {
       }
 
       stage ('트래픽 100% 전환'){
-        parallel {  // 100% 요청 및 실행
+        parallel {
           stage ('Slack: 100% 전환 요청') {
             steps {
               slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
@@ -102,17 +100,26 @@ pipeline {
             steps {
               echo "This is Your Answer: ${Answer}"
               sh """sh /home/ubuntu/LB/${FLAG}-2.sh"""
+              sshagent(credentials: ['ubuntu']) {
+                script {
+                  sh '''
+                  ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST} '
+                  ./0-kill.sh
+                  '
+                  '''
+                }
+              }
             }
           }
         }
       }
-  }
-  post {
-    success {
-      slackSend (channel: '#alarm-test', color: 'good', message: "Jenkins Success\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
-    }
-    failure {
-      slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins FAILED\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
+    post {
+      success {
+        slackSend (channel: '#alarm-test', color: 'good', message: "Jenkins 실행 완료\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
+      }
+      failure {
+        slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins 실패\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
+      }
     }
   }
 }
