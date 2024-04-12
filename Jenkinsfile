@@ -142,8 +142,11 @@ pipeline {
         }
         stage('10:90') {
           steps {
+            // script {
+              // sh (script: 'sh /home/ubuntu/LB/${FLAG}-1.sh')
+            // }
             script {
-              sh (script: 'sh /home/ubuntu/LB/${FLAG}-1.sh')
+              sh 'sh /home/ubuntu/LB/${FLAG}-1.sh'
             }
           }
         }
