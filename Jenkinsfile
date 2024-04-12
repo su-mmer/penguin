@@ -141,6 +141,7 @@ pipeline {
           }
         }
       }
+  }
   post {
     success {
       slackSend (channel: '#alarm-test', color: 'good', message: "Jenkins Success\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
@@ -149,5 +150,4 @@ pipeline {
       slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins FAILED\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
     }
   }
-}
 }
