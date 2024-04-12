@@ -53,10 +53,10 @@ pipeline {
       }
     }
     
-    stage('FAIL 조건') {
+    stage('어플리케이션 실행 실패') {
       when {
-    //     expression { "${FLAG}"=="FAIL:8080"||"FAIL:8081" }
-        anyOf { "${FLAG}" 'FAIL:8080'; "${FLAG}" 'FAIL:8081' }
+        expression { "${FLAG}"=="FAIL:8080" || "${FLAG}"=="FAIL:8081" }
+        // anyOf { "${FLAG}" 'FAIL:8080'; "${FLAG}" 'FAIL:8081' }
       }
       steps {
         echo "Can I?"
