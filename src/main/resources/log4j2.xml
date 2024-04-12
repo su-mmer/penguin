@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
 	<properties>
-		<property name="log_path">${sys:user.home}/${service_name}/logs</property>
+		<property name="service_name">penguin</property>
 		<property name="log_path">/logs</property>
 	</properties>
 	<Appenders>
