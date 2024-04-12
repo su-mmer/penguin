@@ -1,12 +1,11 @@
 def FLAG="FAIL"
-def PORT
 
 pipeline {
   agent any
   stages {
-    stage('Message: Confirm to Deploy') {
+    stage('배포 시작') {
       parallel {
-        stage ('Slack: Confirm to Deploy') {
+        stage ('Slack: 배포 승인 요청') {
           steps {
             script {
               def attachments = [
@@ -28,7 +27,7 @@ pipeline {
             }
           }
         }
-        stage('ssh to comm and execute war') {
+        stage('service 실행') {
           input {
             message "Approve Deploy"
             ok "Yes"
@@ -53,22 +52,6 @@ pipeline {
         }
       }
     }
-
-    // stage('ssh to comm and execute war') {
-    //   steps {
-    //     sshagent(credentials: ['ubuntu']) {
-    //       script {
-    //         FLAG = sh(script: '''
-    //         ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
-    //         ./1-tardownload.sh
-    //         ./2-findport.sh
-    //         '
-    //         ''', returnStdout:true).trim()
-    //         echo "FLAG: ${FLAG}"
-    //       }
-    //     }
-    //   }
-    // }
     
     // stage('FAIL 조건') {
     //   when {
@@ -76,20 +59,20 @@ pipeline {
     //   }
     // }
 
-    stage('8080 port') {
+    stage('트래픽 10% 전환') {
       // stages {
         parallel {  // 10% traffic 요청
-          stage ('10% approve request to slack') {
+          stage ('Slack: 10% 전환 요청') {
             steps {
-              slackSend (channel: '#alarm-test', color: 'good', message: "8080 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
+              slackSend (channel: '#alarm-test', color: 'good', message: "${FLAG} 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
             }
           } 
-          stage ('Change traffic 10%'){
+          stage ('LB 10% 전환'){
             input {
               message "Approve to Change traffic"
               ok "Yes"
               parameters {
-                string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 Backend1로 100% 전환하시겠습니까?')
+                string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 ${FLAG}로 100% 전환하시겠습니까?')
               }
             }
             steps {
@@ -98,35 +81,16 @@ pipeline {
             }
           }
         }
-        // parallel {  // 100% 요청 및 실행
-        //   stage ('100% approve request to slack') {
-        //     steps {
-        //       slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
-        //     }
-        //   }
-        //   stage ('Change traffic 100%'){
-        //     input {
-        //       message "Approve to Change traffic"
-        //       ok "Yes"
-        //       parameters {
-        //         string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 ${FLAG}로 100% 전환하시겠습니까?')
-        //       }
-        //     }
-        //     steps {
-        //       echo "This is Your Answer: ${Answer}"
-        //       sh """sh /home/ubuntu/LB/${FLAG}-2.sh"""
-        //     }
-        //   }
-        // }
       }
-      stage ('100% request'){
+
+      stage ('트래픽 100% 전환'){
         parallel {  // 100% 요청 및 실행
-          stage ('100% approve request to slack') {
+          stage ('Slack: 100% 전환 요청') {
             steps {
               slackSend (channel: '#alarm-test', color: 'good', message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
             }
           }
-          stage ('Change traffic 100%'){
+          stage ('LB 100% 전환'){
             input {
               message "Approve to Change traffic"
               ok "Yes"
