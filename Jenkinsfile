@@ -50,7 +50,7 @@ pipeline {
             FLAG = sh(script: '''
             ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
             ./1-tardownload.sh
-            ./2-findport.sh > port.txt
+            ./2-findport.sh
             '
             ''', returnStdout:true).trim()
             echo "FLAG: ${FLAG}"
