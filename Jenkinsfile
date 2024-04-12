@@ -53,11 +53,15 @@ pipeline {
       }
     }
     
-    // stage('FAIL 조건') {
-    //   when {
+    stage('FAIL 조건') {
+      when {
     //     expression { "${FLAG}"=="FAIL:8080"||"FAIL:8081" }
-    //   }
-    // }
+        anyOf { "${FLAG}" 'FAIL:8080'; "${FLAG}" 'FAIL:8081' }
+      }
+      steps {
+        echo "Can I?"
+      }
+    }
 
     stage('트래픽 10% 전환') {
         parallel {
@@ -71,7 +75,7 @@ pipeline {
               message "Approve to Change traffic"
               ok "Yes"
               parameters {
-                string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 ${FLAG}로 100% 전환하시겠습니까?')
+                string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 ${FLAG}로 10% 전환하시겠습니까?')
               }
             }
             steps {
