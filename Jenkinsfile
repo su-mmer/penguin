@@ -1,4 +1,4 @@
-def FLAG="FAIL"
+def FLAG=NULL
 
 pipeline {
   agent any
@@ -41,6 +41,7 @@ pipeline {
             script {
               FLAG = sh(script: '''
               ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST}  '
+              ./0-kill.sh
               ./1-tardownload.sh
               ./2-findport.sh
               '
