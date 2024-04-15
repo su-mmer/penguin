@@ -22,27 +22,27 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: Grant execute permission for gradlew  # build 권한 추가
-      run: chmod +x ./gradlew
+    # - name: Grant execute permission for gradlew  # build 권한 추가
+    #   run: chmod +x ./gradlew
 
-    - name: Build with Gradle Wrapper  # build
-      run: ./gradlew build
+    # - name: Build with Gradle Wrapper  # build
+    #   run: ./gradlew build
 
-    - name: Zip files  # file 이름 설정, 압축
-      run:
-        tar -zcvf ./communicator-$(date "+%Y-%m-%d")8081.tar.gz -C ./build/libs/ penguin-0.0.1-SNAPSHOT.war
+    # - name: Zip files  # file 이름 설정, 압축
+    #   run:
+    #     tar -zcvf ./communicator-$(date "+%Y-%m-%d")8081.tar.gz -C ./build/libs/ penguin-0.0.1-SNAPSHOT.war
         
 
-    - name: Google auth  # GCP 권한 설정
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+    # - name: Google auth  # GCP 권한 설정
+    #   uses: google-github-actions/auth@v2
+    #   with:
+    #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
+    # - name: Set up Cloud SDK
+    #   uses: google-github-actions/setup-gcloud@v2
 
-    - name: Use gcloud CLI
-      run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d")8081.tar.gz gs://${{ secrets.BUCKET }}
+    # - name: Use gcloud CLI
+    #   run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d")8081.tar.gz gs://${{ secrets.BUCKET }}
     
     - name: trigger Jenkins job
       uses: appleboy/jenkins-action@master
@@ -50,4 +50,4 @@ jobs:
         url: "${{ secrets.HOST }}"
         user: "cloit"
         token: ${{ secrets.JENKINSAPI }}
-        job: "multi test"
+        job: "multi"
