@@ -55,7 +55,9 @@ pipeline {
     
     stage('어플리케이션 실행 실패') {
       when {
-        expression { "${FLAG}"=="FAIL:8080" || "${FLAG}"=="FAIL:8081" }
+        expression { "${FLAG}"=="FAIL:8080" || "${FLAG}"=="FAIL:8081" || "${FLAG}"=="FAIL"}
+        // 셋 다 되나 확인하기
+        
         // anyOf { "${FLAG}" 'FAIL:8080'; "${FLAG}" 'FAIL:8081' }
       }
       steps {
@@ -108,7 +110,7 @@ pipeline {
                 script {
                   sh '''
                   ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST} '
-                  ./0-kill.sh
+                  ./3-kill.sh
                   '
                   '''
                 }
