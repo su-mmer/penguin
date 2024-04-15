@@ -7,7 +7,6 @@ on:
       - dev
       - stg
 
-
 jobs:
   build:
 
@@ -44,3 +43,11 @@ jobs:
 
     - name: Use gcloud CLI
       run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d")8081.tar.gz gs://${{ secrets.BUCKET }}
+    
+    - name: trigger Jenkins job
+      uses: appleboy/jenkins-action@master
+      with:
+        url: "${{ secrets.HOST }}:${{ secrets.PORT }}"
+        user: "cloit"
+        token: ${{ secrets.JENKINSAPI }}
+        job: "multi test"
