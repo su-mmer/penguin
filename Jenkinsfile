@@ -45,7 +45,8 @@ pipeline {
         expression { "${FLAG}"=="FAIL:8080" || "${FLAG}"=="FAIL:8081" || "${FLAG}"=="FAIL"}
       }
       steps {
-        exit()
+        // exit()
+        sh "exit 1"
         // script {
         //   currentBuild.result = "FAILURE"
         // }
