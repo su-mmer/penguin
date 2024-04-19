@@ -7,23 +7,26 @@ pipeline {
       parallel {
         stage ('Slack: 배포 승인 요청') {
           steps {
-            script {
-              def attachments = [
-                [
-                  title: "[${env.BRANCH_NAME}]Communicator: Jenkins 배포 시작 승인 요청",
-                  text: '[${env.BRANCH_NAME}] URL 접속하여 승인 해주십시오.',
-                  color: '#45aaf2',
-                  fields: [
-                    [
-                      title: 'APPROVE_URL',
-                      value: "${env.RUN_DISPLAY_URL}"
-                    ]
-                  ],
-                  footer: "Message from ${env.BRANCH_NAME} branch"
-                ]
-              ]
-              slackSend(channel: "#alarm-test", attachments: attachments)
+            steps {
+              slackSend (channel: '#alarm-test', color: 'good', message: "URL 접속하여 승인 해주십시오.", footer: "Deploy to ${env.BRANCH_NAME} branch")
             }
+            // script {
+            //   def attachments = [
+            //     [
+            //       title: "[${env.BRANCH_NAME}] Communicator: Jenkins 배포 시작 승인 요청",
+            //       text: "URL 접속하여 승인 해주십시오.",
+            //       color: '#45aaf2',
+            //       fields: [
+            //         [
+            //           title: 'URL',
+            //           value: "${env.RUN_DISPLAY_URL}"
+            //         ]
+            //       ],
+            //       footer: "Deploy to ${env.BRANCH_NAME} branch"
+            //     ]
+            //   ]
+            //   slackSend(channel: "#alarm-test", attachments: attachments)
+            // }
           }
         }
         stage('service 실행') {
