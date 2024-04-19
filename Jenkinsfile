@@ -10,28 +10,16 @@ pipeline {
             script {
               def attachments = [
                 [
-                  title: '[${env.BRANCH_NAME}] Communicator: Jenkins 배포 시작 승인 요청',
-                  text: 'URL 접속하여 승인 해주십시오.',
+                  title: 'Communicator: Jenkins 배포 시작 승인 요청',
+                  text: '[${env.BRANCH_NAME}] URL 접속하여 승인 해주십시오.',
                   color: '#45aaf2',
                   fields: [
                     [
-                      title: 'JENKINS_URL',
-                      value: "${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline"
-                    ],
-                    [
-                      title: 'RUN_DISPLAY_URL',
+                      title: 'APPROVE_URL',
                       value: "${env.RUN_DISPLAY_URL}"
-                    ],
-                    [
-                      title: 'RUN_CHANGES_DISPLAY_URL',
-                      value: "${env.RUN_CHANGES_DISPLAY_URL}"
-                    ],
-                    [
-                      title: 'JOB_DISPLAY_URL',
-                      value: "${env.JOB_DISPLAY_URL}"
                     ]
                   ],
-                  footer: "Message from DEV"
+                  footer: "Message from ${env.BRANCH_NAME} DEV"
                 ]
               ]
               slackSend(channel: "#alarm-test", attachments: attachments)
@@ -52,8 +40,8 @@ pipeline {
             script {
               FLAG = sh(script: '''
               ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST} '
-              ./1-tardownload.sh
-              ./2-findport.sh
+                ./1-tardownload.sh
+                ./2-findport.sh
               '
               ''', returnStdout:true).trim()
               echo "FLAG: ${FLAG}"
@@ -133,10 +121,10 @@ pipeline {
     }
   post {
     success {
-      slackSend (channel: '#alarm-test', color: 'good', message: "Jenkins 실행 완료\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
+      slackSend (channel: '#alarm-test', color: 'good', message: "Jenkins 실행 완료\n${env.RUN_DISPLAY_URL}")
     }
     failure {
-      slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins 실패\n${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline")
+      slackSend (channel: '#alarm-test', color: 'danger', message: "Jenkins 실패\n${env.RUN_DISPLAY_URL}")
     }
   }
 }
