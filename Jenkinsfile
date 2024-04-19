@@ -10,14 +10,29 @@ pipeline {
             script {
               def attachments = [
                 [
-                  title: 'Jenkins 배포 시작 승인 요청',
+                  title: '[${env.BRANCH_NAME}] Communicator: Jenkins 배포 시작 승인 요청',
                   text: 'URL 접속하여 승인 해주십시오.',
                   color: '#45aaf2',
                   fields: [
                     [
-                      title: 'URL',
+                      title: 'JENKINS_URL',
                       value: "${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline"
-                      // short: false
+                      short: false
+                    ],
+                    [
+                      title: 'RUN_DISPLAY_URL',
+                      value: "${env.RUN_DISPLAY_URL}"
+                      short: false
+                    ],
+                    [
+                      title: 'RUN_CHANGES_DISPLAY_URL',
+                      value: "${env.RUN_CHANGES_DISPLAY_URL}"
+                      short: false
+                    ],
+                    [
+                      title: 'JOB_DISPLAY_URL',
+                      value: "${env.JOB_DISPLAY_URL}"
+                      short: false
                     ]
                   ],
                   footer: "Message from DEV"
