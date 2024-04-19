@@ -1,9 +1,8 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches:
-      - main
+  push:  # 해당 브랜치에 push가 들어올 경우 workflow 실행
+    branches: 
       - dev
       - stg
 
@@ -22,32 +21,38 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    # - name: Grant execute permission for gradlew  # build 권한 추가
-    #   run: chmod +x ./gradlew
+    # build 권한 추가
+    - name: Grant execute permission for gradlew 
+      run: chmod +x ./gradlew
 
-    # - name: Build with Gradle Wrapper  # build
-    #   run: ./gradlew build
+    # build
+    - name: Build with Gradle Wrapper 
+      run: ./gradlew build
 
-    # - name: Zip files  # file 이름 설정, 압축
-    #   run:
-    #     tar -zcvf ./communicator-$(date "+%Y-%m-%d")8081.tar.gz -C ./build/libs/ penguin-0.0.1-SNAPSHOT.war
+    # file 이름 설정, 압축
+    - name: Zip files  
+      run:
+        tar -zcvf ./communicator-$(date "+%Y-%m-%d")8081.tar.gz -C ./build/libs/ penguin-0.0.1-SNAPSHOT.war
         
-
-    # - name: Google auth  # GCP 권한 설정
-    #   uses: google-github-actions/auth@v2
-    #   with:
-    #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-    # - name: Set up Cloud SDK
-    #   uses: google-github-actions/setup-gcloud@v2
-
-    # - name: Use gcloud CLI
-    #   run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d")8081.tar.gz gs://${{ secrets.BUCKET }}
-    
-    - name: trigger Jenkins job
-      uses: appleboy/jenkins-action@master
+    # Google Cloud Service Account credential auth
+    - name: Google auth
+      uses: google-github-actions/auth@v2
       with:
-        url: "${{ secrets.HOST }}"
-        user: "admin"
-        token: ${{ secrets.JENKINSAPI }}
-        job: "test"
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    # gcloud 명령어 사용을 위한 Google Cloud SDK 구성
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    # 압축파일 google cloud storage로 전송
+    - name: Copy tar file to Cloud Storage
+      run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d")8081.tar.gz gs://${{ secrets.BUCKET }}
+    
+    # Jenkins 시작 이벤트 발생 조건
+    # - name: trigger Jenkins job
+    #   uses: appleboy/jenkins-action@master
+    #   with:
+    #     url: "${{ secrets.HOST }}"  # Jenkins URL
+    #     user: "admin"  # Jenkins에서 job을 실행할 user
+    #     token: ${{ secrets.JENKINSAPI }}  # Jenkins에서 user의 API Token
+    #     job: "test"  # 시작할 job
