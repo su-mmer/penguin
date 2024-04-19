@@ -46,7 +46,9 @@ pipeline {
       }
       steps {
         // exit()
-        currentBuild.result = "FAILURE"
+        script {
+          currentBuild.result = "FAILURE"
+        }
       }
     }
 
