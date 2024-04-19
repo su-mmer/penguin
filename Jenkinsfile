@@ -28,8 +28,7 @@ pipeline {
             script {
               FLAG = sh(script: '''
               ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} "
-              /home/ubuntu/1-tardownload.sh
-              /home/ubuntu/2-findport.sh
+              echo "Hello~"
               "
               ''', returnStdout:true).trim()
               echo "FLAG: ${FLAG}"
