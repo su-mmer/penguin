@@ -7,7 +7,7 @@ pipeline {
       parallel {
         stage ('Slack: 배포 승인 요청') {
           steps {
-              slackSend (channel: '#alarm-test', color: 'good', message: "URL 접속하여 승인 해주십시오.", baseURL: "${env.RUN_DISPLAY_URL}")
+              slackSend (channel: '#alarm-test', color: 'good', message: "URL 접속하여 승인 해주십시오.", baseUrl: "${env.RUN_DISPLAY_URL}")
             // script {
             //   def attachments = [
             //     [
