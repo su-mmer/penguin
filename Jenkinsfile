@@ -45,10 +45,10 @@ pipeline {
         expression { "${FLAG}"=="FAIL:8080" || "${FLAG}"=="FAIL:8081" || "${FLAG}"=="FAIL"}
       }
       steps {
-        // exit()
-        script {
-          currentBuild.result = "FAILURE"
-        }
+        exit()
+        // script {
+        //   currentBuild.result = "FAILURE"
+        // }
       }
     }
 
@@ -56,7 +56,7 @@ pipeline {
         parallel {
           stage ('Slack: 10% 전환 요청') {
             steps {
-              slackSend (channel: '#alarm-test', color: 'good', failOnError: true, message: "${FLAG} 포트에 대한 어플리케이션 실행에 성공했습니다. Load Balancer 트래픽 분배 승인을 요청합니다.\n${env.RUN_DISPLAY_URL}")
+              slackSend (channel: '#alarm-test', color: 'good', failOnError: true, message: "${FLAG} 포트에 대한 어플리케이션 실행에 성공했습니다. LoadBalancer 트래픽 분배 승인을 요청합니다.\n${env.RUN_DISPLAY_URL}")
             }
           } 
           stage ('LB 10% 전환'){
@@ -64,7 +64,7 @@ pipeline {
               message "트래픽 10% 전환 승인"
               ok "예"
               parameters {
-                string(name: 'Answer', defaultValue: '예', description: 'LoadBalancer 트래픽을 ${FLAG}로 10% 전환하시겠습니까?')
+                string(name: 'Answer', defaultValue: '예', description: "LoadBalancer 트래픽을 ${FLAG}로 10% 전환하시겠습니까?")
               }
             }
             steps {
@@ -79,7 +79,7 @@ pipeline {
         parallel {
           stage ('Slack: 100% 전환 요청') {
             steps {
-              slackSend (channel: '#alarm-test', color: 'good', failOnError: true, message: "LB 트래픽이 안정적입니다. Load Balancer 트래픽 전환 승인을 요청합니다.\n${env.RUN_DISPLAY_URL}")
+              slackSend (channel: '#alarm-test', color: 'good', failOnError: true, message: "LB 트래픽이 안정적입니다. LoadBalancer 트래픽 전환 승인을 요청합니다.\n${env.RUN_DISPLAY_URL}")
             }
           }
           stage ('LB 100% 전환'){
@@ -87,7 +87,7 @@ pipeline {
               message "트래픽 100% 전환 승인"
               ok "예"
               parameters {
-                string(name: 'Answer', defaultValue: '예', description: 'LoadBalancer 트래픽을 ${FLAG}로 100% 전환하시겠습니까?')
+                string(name: 'Answer', defaultValue: '예', description: "LoadBalancer 트래픽을 ${FLAG}로 100% 전환하시겠습니까?")
               }
             }
             steps {
