@@ -25,12 +25,13 @@ pipeline {
           steps {
             echo "This is Your Answer: ${Answer}"
             sshagent(credentials: ['ubuntu']) {
+              sh(ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} 'echo "Hello"')
               // script {
-                FLAG = sh(script: '''
-                ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} "
-                echo "Hello~"
-                "
-                ''', returnStdout:true).trim()
+                // FLAG = sh(script: '''
+                // ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} "
+                // echo "Hello~"
+                // "
+                // ''', returnStdout:true).trim()
                 // echo "FLAG: ${FLAG}"
               // }
             }
