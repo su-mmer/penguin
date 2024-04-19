@@ -41,7 +41,7 @@ pipeline {
                 // ''', returnStdout:true).trim()
                 // echo "FLAG: ${FLAG}"
               // }
-            }
+            
           }
         }
       }
