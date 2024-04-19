@@ -3,8 +3,8 @@ def FLAG
 pipeline {
   agent any
   parameters {
-        string(name : 'TARGET_HOST', defaultValue : '0', description : '배포할 서버 ID@IP')
-        string(name : 'PORT', defaultValue : '0', description : '배포할 서버 접속 PORT')
+    string(name : 'TARGET_HOST', defaultValue : '0', description : '배포할 서버 ID@IP')
+    string(name : 'PORT', defaultValue : '0', description : '배포할 서버 접속 PORT')
     }
   stages {
     stage('배포 시작') {
@@ -17,9 +17,9 @@ pipeline {
         stage('service 실행') {
           input {
             message "배포 시작 승인"
-            ok "Yes"
+            ok "예"
             parameters {
-              string(name: 'Answer', defaultValue: 'Yes', description: '새 서비스가 실행됩니다. 배포하시겠습니까?')
+              string(name: 'Answer', defaultValue: '예', description: '새 서비스가 실행됩니다.')
             }
           }
           steps {
@@ -27,7 +27,7 @@ pipeline {
             sshagent(credentials: ['ubuntu']) {
             script {
               FLAG = sh(script: '''
-              ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST} '
+              ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} '
                 ./1-tardownload.sh
                 ./2-findport.sh
               '
@@ -96,7 +96,7 @@ pipeline {
               sshagent(credentials: ['ubuntu']) {
                 script {
                   sh '''
-                  ssh -o StrictHostKeyChecking=no -p ${PORT} ${TARGET_HOST} '
+                  ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} '
                   ./3-kill.sh
                   '
                   '''
