@@ -26,7 +26,9 @@ pipeline {
             echo "This is Your Answer: ${Answer}"
             sshagent(credentials: ['ubuntu']) {
               sh """
-              ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} 'echo "Hello"'
+              ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} '''
+              /home/ubuntu/1-tardownload.sh'
+              '''
               """
               // script {
                 // FLAG = sh(script: '''
