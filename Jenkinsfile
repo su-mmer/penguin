@@ -7,7 +7,7 @@ pipeline {
       parallel {
         stage ('Slack: 배포 승인 요청') {
           steps {
-              slackSend (channel: '#alarm-test', color: 'good', failOnError: true, message: "URL 접속하여 승인 해주십시오.")
+              slackSend (channel: '#alarm-test', color: 'good', failOnError: true, message: "[${env.BRANCH_NAME}] Communicator: Jenkins 배포 시작 승인 요청\n${env.RUN_DISPLAY_URL}")
             // script {
             //   def attachments = [
             //     [
