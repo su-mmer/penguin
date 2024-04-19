@@ -35,15 +35,6 @@ pipeline {
               }
             }
             echo "FLAG: ${FLAG}"
-              // script {
-                // FLAG = sh(script: '''
-                // ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} "
-                // echo "Hello~"
-                // "
-                // ''', returnStdout:true).trim()
-                // echo "FLAG: ${FLAG}"
-              // }
-            
           }
         }
       }
@@ -52,12 +43,10 @@ pipeline {
     stage('어플리케이션 실행 실패') {
       when {
         expression { "${FLAG}"=="FAIL:8080" || "${FLAG}"=="FAIL:8081" || "${FLAG}"=="FAIL"}
-        // 셋 다 되나 확인하기
-        
-        // anyOf { "${FLAG}" 'FAIL:8080'; "${FLAG}" 'FAIL:8081' }
       }
       steps {
-        echo "Can I?"
+        // exit()
+        currentBuild.result = "FAILURE"
       }
     }
 
@@ -71,9 +60,9 @@ pipeline {
           stage ('LB 10% 전환'){
             input {
               message "트래픽 10% 전환 승인"
-              ok "Yes"
+              ok "예"
               parameters {
-                string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 ${FLAG}로 10% 전환하시겠습니까?')
+                string(name: 'Answer', defaultValue: '예', description: 'LoadBalancer 트래픽을 ${FLAG}로 10% 전환하시겠습니까?')
               }
             }
             steps {
@@ -94,9 +83,9 @@ pipeline {
           stage ('LB 100% 전환'){
             input {
               message "트래픽 100% 전환 승인"
-              ok "Yes"
+              ok "예"
               parameters {
-                string(name: 'Answer', defaultValue: 'Yes', description: 'LoadBalancer 트래픽을 ${FLAG}로 100% 전환하시겠습니까?')
+                string(name: 'Answer', defaultValue: '예', description: 'LoadBalancer 트래픽을 ${FLAG}로 100% 전환하시겠습니까?')
               }
             }
             steps {
