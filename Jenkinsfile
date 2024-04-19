@@ -27,7 +27,7 @@ pipeline {
             sshagent(credentials: ['ubuntu']) {
               sh """
               ssh -o StrictHostKeyChecking=no -p ${params.PORT} ${params.TARGET_HOST} '''
-              /home/ubuntu/1-tardownload.sh'
+              /home/ubuntu/1-tardownload.sh
               '''
               """
               // script {
