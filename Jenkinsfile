@@ -17,22 +17,18 @@ pipeline {
                     [
                       title: 'JENKINS_URL',
                       value: "${env.JENKINS_URL}blue/organizations/jenkins/penguin/detail/penguin/${env.BUILD_NUMBER}/pipeline"
-                      short: false
                     ],
                     [
                       title: 'RUN_DISPLAY_URL',
                       value: "${env.RUN_DISPLAY_URL}"
-                      short: false
                     ],
                     [
                       title: 'RUN_CHANGES_DISPLAY_URL',
                       value: "${env.RUN_CHANGES_DISPLAY_URL}"
-                      short: false
                     ],
                     [
                       title: 'JOB_DISPLAY_URL',
                       value: "${env.JOB_DISPLAY_URL}"
-                      short: false
                     ]
                   ],
                   footer: "Message from DEV"
