@@ -30,9 +30,9 @@ jobs:
       run: ./gradlew build
 
     # file 이름 설정, 압축
-    - name: Zip files  
+    - name: Zip files
       run:
-        tar -zcvf ./communicator-$(date "+%Y-%m-%d")8081.tar.gz -C ./build/libs/ penguin-0.0.1-SNAPSHOT.war
+        tar -zcvf ./communicator-$(date "+%Y-%m-%d").tar.gz -C ./build/libs/ penguin-0.0.1-SNAPSHOT.war
         
     # Google Cloud Service Account credential auth
     - name: Google auth
@@ -46,7 +46,7 @@ jobs:
 
     # 압축파일 google cloud storage로 전송
     - name: Copy tar file to Cloud Storage
-      run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d")8081.tar.gz gs://${{ secrets.BUCKET }}
+      run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d").tar.gz gs://${{ secrets.BUCKET }}
     
     # Jenkins 시작 이벤트 발생 조건
     # - name: trigger Jenkins job
