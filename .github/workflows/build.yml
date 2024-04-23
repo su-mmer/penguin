@@ -45,6 +45,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
 
     # 압축파일 google cloud storage로 전송
+    # bucket_name/branch 디렉토리 하위로 전송됨
     - name: Copy tar file to Cloud Storage
       run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d").tar.gz gs://${{ secrets.BUCKET }}/${{ github.ref_name }}/
     
