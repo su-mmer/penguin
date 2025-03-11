@@ -15,6 +15,6 @@ public class PenguinApplication {
 
     @GetMapping(value = "/")
     public String doGetHelloWorld() {
-        return "Hello World 8081";
+        return "Hello World";
     }
 }

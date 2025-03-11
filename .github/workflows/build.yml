@@ -1,6 +1,7 @@
 name: GITHUB ACTIONS NAME
 
 on:
+
   workflow_dispatch:
     inputs:
       input_choice:
@@ -13,9 +14,11 @@ on:
           - STG
           - PRD
 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+
       - name: Print the input
         run: echo "${{ github.event.inputs.input_choice }}"
