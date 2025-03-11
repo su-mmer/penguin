@@ -1,43 +1,21 @@
-name: Java CI with Gradle
+name: GITHUB ACTIONS NAME
 
 on:
-  push:
-    branches: [ "main" ]
-
+  workflow_dispatch:
+    inputs:
+      input_choice:
+        description: 'Choice to Deploy Environment'
+        required: true
+        default: 'DEV'
+        type: choice
+        options:
+          - DEV
+          - STG
+          - PRD
 
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-
-    - name: Grant execute permission for gradlew  # build 권한 추가
-      run: chmod +x ./gradlew
-
-    - name: Build with Gradle Wrapper  # build
-      run: ./gradlew build
-
-    - name: Zip files  # file 이름 설정, 압축
-      run:
-        tar -zcvf ./communicator-$(date "+%Y-%m-%d")8081.tar.gz -C ./build/libs/ penguin-0.0.1-SNAPSHOT.war
-        
-
-    - name: Google auth  # GCP 권한 설정
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-
-    - name: Use gcloud CLI
-      run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d")8081.tar.gz gs://${{ secrets.BUCKET }}
+      - name: Print the input
+        run: echo "${{ github.event.inputs.input_choice }}"
