@@ -32,7 +32,12 @@ jobs:
     # file 이름 설정, 압축
     - name: Zip files
       run:
-        tar -zcvf ./penguin-$(date "+%Y-%m-%d").tar.gz -C ./build/libs/ penguin.war
+        ls -al ./build/libs/
+        
+    # # file 이름 설정, 압축
+    # - name: Zip files
+    #   run:
+    #     tar -zcvf ./penguin-$(date "+%Y-%m-%d").tar.gz -C ./build/libs/ penguin.war
         
     # Google Cloud Service Account credential auth
     # - name: Google auth
@@ -59,13 +64,13 @@ jobs:
     #     token: ${{ secrets.JENKINSAPI }}  # Jenkins에서 user의 API Token
     #     job: "test"  # 시작할 job
 
-    - name: scp file
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        source: "./penguin-*.tar.gz"
-        target: "/home/${{ secrets.USERNAME }}/"
-        # strip_components: 1
+    # - name: scp file
+    #   uses: appleboy/scp-action@master
+    #   with:
+    #     host: ${{ secrets.HOST }}
+    #     username: ${{ secrets.USERNAME }}
+    #     key: ${{ secrets.KEY }}
+    #     port: ${{ secrets.PORT }}
+    #     source: "./penguin-*.tar.gz"
+    #     target: "/home/${{ secrets.USERNAME }}/"
+    #     # strip_components: 1
