@@ -20,5 +20,4 @@ public class PenguinApplication {
         return "Hello World";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
 }
