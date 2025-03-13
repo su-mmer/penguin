@@ -32,7 +32,7 @@ jobs:
     # file 이름 설정, 압축
     - name: Zip files
       run:
-        tar -zcvf ./penguin-$(date "+%Y-%m-%d").tar.gz -C ./build/libs/ penguin..war
+        tar -zcvf ./penguin-$(date "+%Y-%m-%d").tar.gz -C ./build/libs/ penguin.war
         
     # Google Cloud Service Account credential auth
     # - name: Google auth
