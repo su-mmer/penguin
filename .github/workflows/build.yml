@@ -32,22 +32,23 @@ jobs:
     # file 이름 설정, 압축
     - name: Zip files
       run:
-        tar -zcvf ./communicator-$(date "+%Y-%m-%d").tar.gz -C ./build/libs/ penguin-0.0.1-SNAPSHOT.war
+        tar -zcvf ./penguin-$(date "+%Y-%m-%d").tar.gz -C ./build/libs/ penguin..war
         
     # Google Cloud Service Account credential auth
-    - name: Google auth
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+    # - name: Google auth
+    #   uses: google-github-actions/auth@v2
+    #   with:
+    #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
     # gcloud 명령어 사용을 위한 Google Cloud SDK 구성
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
+    # - name: Set up Cloud SDK
+    #   uses: google-github-actions/setup-gcloud@v2
 
     # 압축파일 google cloud storage로 전송
-    # bucket_name/branch 디렉토리 하위로 전송됨
-    - name: Copy tar file to Cloud Storage
-      run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d").tar.gz gs://${{ secrets.BUCKET }}/${{ github.ref_name }}/
+
+    # - name: Copy tar file to Cloud Storage
+    #   run: gcloud storage cp ./communicator-$(date "+%Y-%m-%d").tar.gz gs://${{ secrets.BUCKET }}/${{ github.ref_name }}/
+
     
     # Jenkins 시작 이벤트 발생 조건
     # - name: trigger Jenkins job
@@ -57,3 +58,14 @@ jobs:
     #     user: "admin"  # Jenkins에서 job을 실행할 user
     #     token: ${{ secrets.JENKINSAPI }}  # Jenkins에서 user의 API Token
     #     job: "test"  # 시작할 job
+
+    - name: scp file
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        source: "./penguin-*.tar.gz"
+        target: "/home/${{ secrets.USERNAME }}/"
+        # strip_components: 1
