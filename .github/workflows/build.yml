@@ -13,7 +13,7 @@ on:
           - stg
           
 env:
-  jenkins_job: "${{ inputs.input_choice == 'dev' && 'DEV/communicator'  || 'STG/communicator' }}"
+  jenkins_job: "${{ inputs.input_choice == 'dev' && secrets.BUCKET  || secrets.PORT }}"
   bucket: "${{ inputs.input_choice == 'dev' && 'ew1-dvs-dev-app'  || 'ew1-dvs-stg-app' }}"
 
 jobs:
