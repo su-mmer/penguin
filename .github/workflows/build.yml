@@ -6,11 +6,15 @@ on:
       input_choice:
         description: 'Choice to Deploy Environment'
         required: true
-        default: 'DEV'
+        default: 'dev'
         type: choice
         options:
-          - DEV
-          - STG
+          - dev
+          - stg
+          
+env:
+  jenkins_job: "${{ inputs.input_choice == 'dev' && 'DEV/communicator'  || 'STG/communicator' }}"
+  bucket: "${{ inputs.input_choice == 'dev' && 'ew1-dvs-dev-app'  || 'ew1-dvs-stg-app' }}"
 
 jobs:
   build:
@@ -19,23 +23,29 @@ jobs:
       contents: read
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
+    - name: This is your choice
+      run: echo "Branch is ${{ github.ref_name }} chose ${{ inputs.input_choice }}"
 
-    # build 권한 추가
-    - name: Grant execute permission for gradlew 
-      run: chmod +x ./gradlew
+    - name: This is your env
+      run: echo "jenkins_job is ${{ env.jenkins_job }} and bucket is ${{ env.bucket }}"
+      
+    # - uses: actions/checkout@v3
+    # - name: Set up JDK 11
+    #   uses: actions/setup-java@v3
+    #   with:
+    #     java-version: '11'
+    #     distribution: 'temurin'
 
-    # build
-    - name: Build with Gradle Wrapper 
-      run: ./gradlew build
+    # # build 권한 추가
+    # - name: Grant execute permission for gradlew 
+    #   run: chmod +x ./gradlew
 
-    # file 이름 설정, 압축
-    - name: Zip files
-      run:
-        ls -al ./build/libs/
+    # # build
+    # - name: Build with Gradle Wrapper 
+    #   run: ./gradlew build
+
+    # # file 이름 설정, 압축
+    # - name: Zip files
+    #   run:
+    #     ls -al ./build/libs/
   
